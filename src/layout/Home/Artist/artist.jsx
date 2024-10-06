@@ -1,7 +1,7 @@
-import React, { useEffect, useLayoutEffect, useState }  from "react";
+import React, { useEffect, useState }  from "react";
 import { useLocation } from "react-router-dom";
-import Api from "../../Api";
-import { Card, CardContent } from '../../components/ui/card';
+import Api from "../../../Api";
+import { Card, CardContent } from '../../../components/ui/card';
 
 
 function artist () {
@@ -29,7 +29,7 @@ function artist () {
     return (
         <>
     <div className="container mx-auto p-4 space-y-6">
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden bg-cyan-800 ">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-6">
             <img 

@@ -1,6 +1,6 @@
-import Api from "../../Api";
+import Api from "../../../Api";
 import React, { useEffect, useState } from "react";
-import {ScrollArea} from "../../components/ui/scroll-area"
+import {ScrollArea} from "../../../components/ui/scroll-area"
 import { useNavigate , createSearchParams  } from "react-router-dom";;
 function RandomArtists (){
   const navigate = useNavigate();

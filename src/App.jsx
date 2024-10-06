@@ -1,7 +1,9 @@
-import RandomArtists from "./layout/Home/artists";
+
 import { createBrowserRouter, createRoutesFromElements,Route, RouterProvider } from "react-router-dom";
 import Home from "./layout/Home/home";
-import Artist from "./layout/Home/artist";
+import Artist from "./layout/Home/Artist/artist";
+import Search from "./layout/Home/search/Search";
+
 function App() {
 
  const router = createBrowserRouter([
@@ -12,6 +14,9 @@ function App() {
   {
     path:"/artist",
     element:<Artist/>
+  },{
+    path: "/search",
+    element: <Search/>
   }
  ])
 
