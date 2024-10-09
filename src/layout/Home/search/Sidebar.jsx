@@ -4,7 +4,6 @@ import { Home, Menu, X, Settings, HelpCircle } from 'lucide-react';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const menuItems = [

@@ -1,7 +1,7 @@
 import Api from "../../../Api";
 import React, { useEffect, useState } from "react";
 import {ScrollArea} from "../../../components/ui/scroll-area"
-import { useNavigate , createSearchParams  } from "react-router-dom";;
+import { useNavigate , createSearchParams  } from "react-router-dom";
 function RandomArtists (){
   const navigate = useNavigate();
     const [artists,setArtists] = useState([])
@@ -20,7 +20,7 @@ function RandomArtists (){
     },[])
     function handleClick (Id) { 
       const path = {
-        pathname:"/artist",
+        path:"/artist",
         search:createSearchParams({Id}).toString()
       }
       navigate(path)
