@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchComponent from "./search/Search"
 import { Search } from "lucide-react";
@@ -41,8 +41,10 @@ export default function home() {
       </button>
     </div>
   </form>
+  <Suspense fallback={<div>...Loading</div>}>
   <Outlet/>
-  <MusicPlayer  />
+  </Suspense>
+  <MusicPlayer/>
 </div>
 
     </>

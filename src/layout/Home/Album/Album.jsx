@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Play, Plus, MoreHorizontal, Clock } from 'lucide-react';
 import { useLocation } from 'react-router-dom'
 import Api from '../../../Api'
-
+import { useMain } from '../../../Context';
 
 export default function Album() {
   const [albumData,setAlbumData] = useState(null)
   const url = useLocation()
+  const {setValue} = useMain()
   const albumId = url?.search.split('=')[1];
   const [songs,setSongs]= useState(null)
   useEffect(()=>{
@@ -21,7 +22,7 @@ export default function Album() {
     }
     fetching()
   },[albumId])
-console.log(albumData)
+  console.log(songs)
   return (
     <div className="bg-gradient-to-b from-gray-800 to-gray-900 text-white p-8 font-sans">
     <div className="flex items-start space-x-6 mb-8">
@@ -34,7 +35,7 @@ console.log(albumData)
     </div>
     
     <div className="flex items-center space-x-4 mb-8">
-      <button className="bg-white text-black rounded-full p-3">
+      <button  className="bg-white text-black rounded-full p-3">
         <Play size={24} />
       </button>
       <button className="border border-gray-400 rounded-full p-2">
@@ -55,7 +56,7 @@ console.log(albumData)
       </thead>
       <tbody>
         {songs?.map((song,index) => (
-          <tr key={index} className="hover:bg-gray-800">
+          <tr onClick={()=>setValue(song.id)} key={index} className="hover:bg-gray-800">
             <td className="py-3">{index+1}</td>
             <td>
               <p className="font-medium">{song.name}</p>

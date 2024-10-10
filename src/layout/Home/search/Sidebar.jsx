@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from "../../../components/ui/button"
 import { Home, Menu, X, Settings, HelpCircle } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
-
+  const navigate= useNavigate()
   const menuItems = [
     { icon: Home, label: 'Home' },
     { icon: Settings, label: 'Settings' },
@@ -16,7 +16,7 @@ const Sidebar = () => {
     <>
       <Button 
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 p-2"
+        className="fixed top-4 left-4 z-50 p-2 bg-background"
         variant="outline"
         size="icon"
       >
@@ -24,7 +24,7 @@ const Sidebar = () => {
       </Button>
 
       <div 
-        className={`fixed top-0 left-0 h-full w-64  shadow-lg transform transition-transform bg-background duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-64 z-30  shadow-lg transform transition-transform bg-background duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

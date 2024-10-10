@@ -7,10 +7,12 @@ import { ScrollArea } from "../../../components/ui/scroll-area";
 import { useNavigate , createSearchParams, useLocation } from "react-router-dom";
 import { useMain } from "../../../Context";
 import RandomArtists from "../Artist/artists";
+
+
 export default function searchComponent() {
-  const {setValue} = useMain();
+  const {value,setValue} = useMain();
   const url = useLocation()
-  const search =url.search.split('=')[1].replace("+"," ")
+  const [search,setSearch] = useState(url.search.split('=')[1].replace("+"," "))
   const [albums, setAlbums] = useState();
   const [globalResult,setGlobalResult] = useState()
   const [songs,setSongs]= useState()
@@ -29,7 +31,9 @@ export default function searchComponent() {
       try {
         const res = await Api(`/api/search/songs?query=${search}`)
         setSongs(res.data.data.results)
+        if(value==null){
         setValue(res.data.data.results[0].id)
+        }
       } catch (error) {
         console.log(error);
       }
@@ -46,7 +50,7 @@ export default function searchComponent() {
     fetchingGlobal()
     fetchingSong()
     fetchingAlbum()
-  },[search])
+  },[search,url])
   function handleSongClick(songId){
     setValue(songId)
   }
@@ -57,7 +61,6 @@ export default function searchComponent() {
         }
         navigate(path)
   }
-console.log(globalResult)
   return (
     <ScrollArea className="h-[80vh] flex">
     <div className="flex-1 flex flex-col">
@@ -125,7 +128,7 @@ console.log(globalResult)
               </div>
           </div>
         )}
-    <RandomArtists/>
+    <RandomArtists search={search}/>
       </div>
     </div>
   </ScrollArea>

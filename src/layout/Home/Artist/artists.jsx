@@ -2,13 +2,13 @@ import Api from "../../../Api";
 import React, { useEffect, useState } from "react";
 import {ScrollArea} from "../../../components/ui/scroll-area"
 import { useNavigate , createSearchParams  } from "react-router-dom";
-function RandomArtists (){
+function RandomArtists ({search}){
   const navigate = useNavigate();
     const [artists,setArtists] = useState([])
     useEffect(()=>{
         const artist = async () => {
             try{
-          const res = await Api.get('/api/search/artists?query= Top artists ')
+          const res = await Api.get(`/api/search/artists?query=${search||"top artists"} `)
           const data = res.data.data.results;
            if(data) setArtists(data)
             } catch{(error)=>{

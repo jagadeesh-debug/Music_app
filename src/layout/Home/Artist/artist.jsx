@@ -29,7 +29,7 @@ function artist () {
     return (
         <>
     <div className="container mx-auto p-4 space-y-6">
-      <Card className="overflow-hidden bg-cyan-800 ">
+      <Card className="overflow-hidden bg-gradient-to-b from-cyan-800 to-cyan-950 ">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-6">
             <img 
@@ -44,11 +44,11 @@ function artist () {
         </CardContent>
       </Card>
 
-      <div className="space-y-4">
+      <div className="space-y-4 border-t">
         <h2 className="text-2xl font-semibold">Top Songs</h2>
         <ul className="space-y-2">
           {data.topSongs.map((song, index) => (
-            <li key={index} className="border rounded-lg hover:bg-secondary transition-colors duration-300">
+            <li key={index} className=" rounded-lg hover:bg-secondary transition-colors duration-300">
               <div className="flex items-center justify-between p-3">
                 <div className="flex items-center space-x-4">
                   <img className="w-12 h-12 rounded-md" src={song.image[1].url} alt={song.name} />
