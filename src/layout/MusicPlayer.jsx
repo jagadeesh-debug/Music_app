@@ -3,12 +3,14 @@ import { Play, Pause, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Repeat, 
 import ReactPlayer from 'react-player';
 import Api from '../Api';
 import { useMain } from '../Context';
+import { getImageColor } from './color/ColorGenrator';
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [muted, setMuted] = useState(false);
   const [played, setPlayed] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [bgColor,setBgColor] = useState()
   const playerRef = useRef(null);
   const [song,setSong] = useState()
   const {value} = useMain()
@@ -17,13 +19,15 @@ function MusicPlayer() {
       try{
       const res = await Api(`/api/songs/${value}`)
       setSong(res.data.data[0])
-      console.log(res.data.data[0])
+      getImageColor(res.data.data[0].image[2].url)
+      .then(color => setBgColor(`rgb(${color.r}, ${color.g}, ${color.b})`))
       } catch(error){
         console.log(error)
       }
     }
     fetchSong()
   },[value])
+  console.log(bgColor)
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     setVolume(parseFloat(e.target.value));
@@ -47,7 +51,7 @@ function MusicPlayer() {
 
   const VolumeIcon = muted || volume === 0 ? VolumeX : volume > 0.5 ? Volume2 : Volume1;
 return (
-  <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4">
+  <div className={`fixed bottom-0 left-0 right-0 bg-[${bgColor}] text-white p-4`}>
   <ReactPlayer
     ref={playerRef}
     url={song?.downloadUrl[4].url}

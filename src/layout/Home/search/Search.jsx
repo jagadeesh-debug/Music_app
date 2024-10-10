@@ -6,6 +6,7 @@ import { PlayCircle } from 'lucide-react';
 import { ScrollArea } from "../../../components/ui/scroll-area";
 import { useNavigate , createSearchParams, useLocation } from "react-router-dom";
 import { useMain } from "../../../Context";
+import RandomArtists from "../Artist/artists";
 export default function searchComponent() {
   const {setValue} = useMain();
   const url = useLocation()
@@ -13,7 +14,6 @@ export default function searchComponent() {
   const [albums, setAlbums] = useState();
   const [globalResult,setGlobalResult] = useState()
   const [songs,setSongs]= useState()
-  // const [songId,setSongId] = useState()
   const navigate =  useNavigate()
   useEffect(()=>{
     async  function  fetchingGlobal() {
@@ -57,7 +57,7 @@ export default function searchComponent() {
         }
         navigate(path)
   }
-
+console.log(globalResult)
   return (
     <ScrollArea className="h-[80vh] flex">
     <div className="flex-1 flex flex-col">
@@ -73,12 +73,7 @@ export default function searchComponent() {
                     alt={globalResult?.topQuery?.results[0].title}
                     className="w-full max-w-[250px] mx-auto mb-4 rounded shadow-lg"
                   />
-                  <h3 className="text-xl font-semibold text-center mb-2">{globalResult?.topQuery?.results[0].title|globalResult?.songs.results[0].title}</h3>
-                  <div className="flex justify-center">
-                    <button className="mt-2 p-3 rounded-full">
-                      <PlayCircle className="w-8 h-8" />
-                    </button>
-                  </div>
+                  <h3 className="text-xl font-semibold text-center mb-2">{globalResult?.topQuery?.results[0].title||globalResult?.songs.results[0].title}</h3>
                 </CardContent>
               </Card>
             </div>
@@ -130,6 +125,7 @@ export default function searchComponent() {
               </div>
           </div>
         )}
+    <RandomArtists/>
       </div>
     </div>
   </ScrollArea>

@@ -20,29 +20,35 @@ function RandomArtists (){
     },[])
     function handleClick (Id) { 
       const path = {
-        path:"/artist",
+        pathname:"/artist",
         search:createSearchParams({Id}).toString()
       }
       navigate(path)
     }
     return (
-        <ScrollArea className="h-[250px] w-full rounded-md border p-6">
-        <div className="flex flex-wrap  p-4 gap-4 ">
-          {artists?.map((artist, i) => (
-            <div key={i} className="flex items-center space-x-4 p-2 w-[340px]  rounded-full hover:cursor-pointer hover:bg-secondary" onClick={()=>{handleClick(artist.id)}} >
+      <div className=" mt-4 border rounded-xl p-4 ">
+        <h2 className="text-2xl font-bold mb-4">Arist</h2>
+      <div className="flex space-x-4 px-4 overflow-x-scroll">
+        {artists?.map((artist, i) => (
+          <div 
+            key={i} 
+            className="flex-none w-40 group bg-secondary"
+            onClick={() => handleClick(artist.id)}
+          >
+            <div className="flex flex-col items-center aspect-square mb-2 overflow-hidden rounded-lg">
               <img
                 src={artist.image[2].url}
                 alt={artist.name}
-                className="w-16 h-16 rounded-full object-cover"
+                className="w-32 h-32 object-cover rounded-lg mt-2 transition-transform duration-200 group-hover:scale-105"
               />
-              <div className="flex flex-col">
-                <h3 className="text-sm font-medium leading-none">{artist.name}</h3>
-                <p className="text-sm text-muted-foreground">Artist</p>
-              </div>
             </div>
-          ))}
-        </div>
-      </ScrollArea>
+            <h3 className="text-sm font-medium truncate text-center">
+              {artist.name}
+            </h3>
+          </div>
+        ))}
+      </div>
+    </div>
     )
 }
 export default RandomArtists

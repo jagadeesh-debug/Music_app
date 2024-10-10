@@ -7,20 +7,21 @@ import MusicPlayer from "../MusicPlayer";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./search/Sidebar";
 import { useRef } from "react";
-import { createSearchParams } from "react-router-dom";
+import { createSearchParams , useSearchParams } from "react-router-dom";
 export default function home() {
   const [searchTxt , setSearchTxt ] = useState("permish verma")
-  const [songId,setSongId] = useState(12345)
   const inputRef= useRef()
+  const [searchQuery,setSearchQuery] = useSearchParams()
   const navigate = useNavigate()
   function handleSubmit(e) {
     e.preventDefault();
-    setSearchTxt(inputRef.current.value)
+    const search = inputRef.current.value;
+    setSearchQuery({search}).toString()
   }
   useEffect(()=>{
     const path={
       pathname:"/search",
-      search: createSearchParams({searchTxt, songId}).toString()
+      search: createSearchParams({searchTxt}).toString()
     }
     navigate(path)
   },[])
@@ -41,7 +42,6 @@ export default function home() {
     </div>
   </form>
   <Outlet/>
-  {/* <SearchComponent search={searchTxt} setSongId={setSongId} /> */}
   <MusicPlayer  />
 </div>
 
