@@ -18,15 +18,15 @@ function App() {
         element:<Artist/>
       },
       {
-        path: "/music",
-        element:<MusicPlayer/>
+        path:"/search",
+        element:<Search/>
+      },
+      {
+        path: "/album",
+        element : <Album/>
       }
     ]
   },
-  {
-    path: "/album",
-    element : <Album/>
-  }
  ])
 
   return (

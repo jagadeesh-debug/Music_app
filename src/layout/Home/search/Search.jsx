@@ -2,18 +2,19 @@ import React, { useState, useEffect } from "react";
 import Api from "../../../Api";
 import { Label } from "../../../components/ui/label";
 import { Card , CardContent} from "../../../components/ui/card";
-import Sidebar from "./Sidebar";
 import { PlayCircle } from 'lucide-react';
 import { ScrollArea } from "../../../components/ui/scroll-area";
-import { useNavigate , createSearchParams } from "react-router-dom";
-
-export default function searchComponent({search , setSongId}) {
-
+import { useNavigate , createSearchParams, useLocation } from "react-router-dom";
+import { useMain } from "../../../Context";
+export default function searchComponent() {
+  const {setValue} = useMain();
+  const url = useLocation()
+  const search =url.search.split('=')[1].replace("+"," ")
   const [albums, setAlbums] = useState();
   const [globalResult,setGlobalResult] = useState()
   const [songs,setSongs]= useState()
+  // const [songId,setSongId] = useState()
   const navigate =  useNavigate()
-
   useEffect(()=>{
     async  function  fetchingGlobal() {
       try {
@@ -28,6 +29,7 @@ export default function searchComponent({search , setSongId}) {
       try {
         const res = await Api(`/api/search/songs?query=${search}`)
         setSongs(res.data.data.results)
+        setValue(res.data.data.results[0].id)
       } catch (error) {
         console.log(error);
       }
@@ -44,10 +46,9 @@ export default function searchComponent({search , setSongId}) {
     fetchingGlobal()
     fetchingSong()
     fetchingAlbum()
-
   },[search])
   function handleSongClick(songId){
-    setSongId(songId)
+    setValue(songId)
   }
   function handleAlbumsClick( Id ){ 
       const   path={
@@ -56,7 +57,7 @@ export default function searchComponent({search , setSongId}) {
         }
         navigate(path)
   }
-console.log(albums)
+
   return (
     <ScrollArea className="h-[80vh] flex">
     <div className="flex-1 flex flex-col">
@@ -68,11 +69,11 @@ console.log(albums)
               <Card>
                 <CardContent className="p-6">
                   <img
-                    src={globalResult?.topQuery.results[0].image[2].url}
-                    alt={globalResult?.topQuery.results[0].title}
+                    src={globalResult?.topQuery?.results[0].image[2].url}
+                    alt={globalResult?.topQuery?.results[0].title}
                     className="w-full max-w-[250px] mx-auto mb-4 rounded shadow-lg"
                   />
-                  <h3 className="text-xl font-semibold text-center mb-2">{globalResult.topQuery.results[0].title}</h3>
+                  <h3 className="text-xl font-semibold text-center mb-2">{globalResult?.topQuery?.results[0].title|globalResult?.songs.results[0].title}</h3>
                   <div className="flex justify-center">
                     <button className="mt-2 p-3 rounded-full">
                       <PlayCircle className="w-8 h-8" />
@@ -119,16 +120,14 @@ console.log(albums)
         {albums && (
           <div className="mt-8 border p-4 rounded-xl">
             <h2 className="text-2xl font-bold mb-4">Albums</h2>
-            <ScrollArea className="w-full">
-              <div className="flex gap-4 pb-4">
+              <div className="flex gap-4 pb-4 overflow-x-scroll">
                 {albums.map((album, index) => (
-                  <div onClick={()=>{handleAlbumsClick(album.url)}} key={index} className="bg-secondary rounded-2xl p-4 flex flex-col items-center flex-shrink-0">
+                  <div onClick={()=>{handleAlbumsClick(album.id)}} key={index} className="bg-secondary rounded-2xl p-4 flex flex-col items-center flex-shrink-0">
                     <img src={album.image[2].url} alt={album.name} className="w-32 h-32 object-cover rounded-lg mb-2" />
                     <Label className="text-center w-32">{album.name}</Label>
                   </div>
                 ))}
               </div>
-            </ScrollArea>
           </div>
         )}
       </div>

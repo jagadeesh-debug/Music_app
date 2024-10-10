@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchComponent from "./search/Search"
 import { Search } from "lucide-react";
@@ -7,14 +7,23 @@ import MusicPlayer from "../MusicPlayer";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./search/Sidebar";
 import { useRef } from "react";
+import { createSearchParams } from "react-router-dom";
 export default function home() {
-  const [searchTxt , setSearchTxt ] = useState("I guess")
-  const [songId,setSongId] = useState()
+  const [searchTxt , setSearchTxt ] = useState("permish verma")
+  const [songId,setSongId] = useState(12345)
   const inputRef= useRef()
+  const navigate = useNavigate()
   function handleSubmit(e) {
     e.preventDefault();
     setSearchTxt(inputRef.current.value)
   }
+  useEffect(()=>{
+    const path={
+      pathname:"/search",
+      search: createSearchParams({searchTxt, songId}).toString()
+    }
+    navigate(path)
+  },[])
   return (
     <>
 <div>
@@ -32,8 +41,8 @@ export default function home() {
     </div>
   </form>
   <Outlet/>
-  <SearchComponent search={searchTxt} setSongId={setSongId} />
-  <MusicPlayer songId={songId} />
+  {/* <SearchComponent search={searchTxt} setSongId={setSongId} /> */}
+  <MusicPlayer  />
 </div>
 
     </>

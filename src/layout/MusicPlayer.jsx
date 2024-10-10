@@ -2,20 +2,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, SkipBack, SkipForward, Volume1, Volume2, VolumeX, Repeat, Shuffle } from 'lucide-react';
 import ReactPlayer from 'react-player';
 import Api from '../Api';
-function MusicPlayer({songId}) {
-  const [isPlaying, setIsPlaying] = useState(true);
+import { useMain } from '../Context';
+function MusicPlayer() {
+  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [muted, setMuted] = useState(false);
   const [played, setPlayed] = useState(0);
   const [duration, setDuration] = useState(0);
   const playerRef = useRef(null);
   const [song,setSong] = useState()
-
-
+  const {value} = useMain()
   useEffect(()=>{
     async function fetchSong() {
       try{
-      const res = await Api(`/api/songs/${songId}`)
+      const res = await Api(`/api/songs/${value}`)
       setSong(res.data.data[0])
       console.log(res.data.data[0])
       } catch(error){
@@ -23,7 +23,7 @@ function MusicPlayer({songId}) {
       }
     }
     fetchSong()
-  },[songId])
+  },[value])
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     setVolume(parseFloat(e.target.value));
