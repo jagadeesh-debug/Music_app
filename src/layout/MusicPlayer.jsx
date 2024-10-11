@@ -79,7 +79,7 @@ function MusicPlayer() {
     <>
       <Drawer >
         <DrawerTrigger asChild>
-          <Button variant="outline" className=" absolute right-6 bottom-6 p-0 h-16 w-16 animate-spin [animation-duration:5s] rounded-full">{
+          <Button variant="outline" className={`absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s] ${isPlaying? "animate-spin": ""} rounded-full`}>{
             <img className="rounded-full" src={song?.image[1].url} alt="Song" />
             }</Button>
         </DrawerTrigger>
