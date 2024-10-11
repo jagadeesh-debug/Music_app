@@ -12,7 +12,7 @@ import RandomArtists from "../Artist/artists";
 export default function searchComponent() {
   const {value,setValue} = useMain();
   const url = useLocation()
-  const [search,setSearch] = useState(url.search.split('=')[1].replace("+"," "))
+  const search=url.search.split('=')[1].replace("+"," ")
   const [albums, setAlbums] = useState();
   const [globalResult,setGlobalResult] = useState()
   const [songs,setSongs]= useState()
@@ -50,7 +50,7 @@ export default function searchComponent() {
     fetchingGlobal()
     fetchingSong()
     fetchingAlbum()
-  },[search,url])
+  },[url,search])
   function handleSongClick(songId){
     setValue(songId)
   }
@@ -62,50 +62,56 @@ export default function searchComponent() {
         navigate(path)
   }
   return (
-    <ScrollArea className="h-[80vh] flex">
-    <div className="flex-1 flex flex-col">
-      <div className="max-w-7xl mx-auto p-6 flex-grow">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {globalResult && (
-            <div className="lg:w-1/3">
-              <h2 className="text-2xl font-bold mb-4">Top Result</h2>
+    <ScrollArea className="h-[80vh] w-full flex">
+    <div className="flex flex-col w-full">
+      <div className="max-w-7xl mx-auto sm:p-6 flex-grow">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          {globalResult?.topQuery.results[0] && (
+            <div className="w-[90vw] sm:w-full lg:w-1/3 ">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">Top Result</h2>
               <Card>
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-6">
                   <img
                     src={globalResult?.topQuery?.results[0].image[2].url}
                     alt={globalResult?.topQuery?.results[0].title}
-                    className="w-full max-w-[250px] mx-auto mb-4 rounded shadow-lg"
+                    className="w-full max-w-[200px] sm:max-w-[250px] mx-auto mb-4 rounded shadow-lg"
                   />
-                  <h3 className="text-xl font-semibold text-center mb-2">{globalResult?.topQuery?.results[0].title||globalResult?.songs.results[0].title}</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-center mb-2">
+                    {globalResult?.topQuery?.results[0].title || globalResult?.songs.results[0].title}
+                  </h3>
                 </CardContent>
               </Card>
             </div>
           )}
           {songs && (
-            <div className="lg:w-2/3 border rounded-xl p-4">
-              <h2 className="text-2xl font-bold mb-4">Songs</h2>
-              <ScrollArea className="h-[50vh]">
+            <div className="w-[95vw] sm:w-full lg:w-2/3 border rounded-xl p-4">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">Songs</h2>
+              <ScrollArea className="h-[40vh] sm:h-[50vh]">
                 <ul className="space-y-2 pr-4">
                   {songs.map((song, index) => (
-                    <li key={index} className="flex items-center justify-between p-3 rounded-lg transition-colors hover:bg-secondary" onClick={()=>handleSongClick(song.id)}>
-                      <div className="flex items-center space-x-4">
-                        <span className="w-6 text-center">{index + 1}</span>
+                    <li
+                      key={index}
+                      className="flex items-center justify-between p-2 sm:p-3 rounded-lg transition-colors hover:bg-secondary"
+                      onClick={() => handleSongClick(song.id)}
+                    >
+                      <div className="flex items-center space-x-2 sm:space-x-4">
+                        <span className="w-4 sm:w-6 text-center text-sm sm:text-base">{index + 1}</span>
                         <img
                           src={song.image ? song.image[2].url : "/api/placeholder/40/40"}
                           alt={song.name}
-                          className="w-10 h-10 rounded"
+                          className="w-8 h-8 sm:w-10 sm:h-10 rounded"
                         />
                         <div>
-                          <p className="font-medium">{song.name}</p>
-                          <p className="text-sm">{song.artists.primary[0].name}</p>
+                          <p className="font-medium text-sm sm:text-base">{song.name}</p>
+                          <p className="text-xs sm:text-sm">{song.artists.primary[0].name}</p>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-4">
-                        <span>
-                          {Math.floor(song.duration/60)}:{(song.duration%60).toString().padStart(2, '0')}
+                      <div className="flex items-center space-x-2 sm:space-x-4">
+                        <span className="text-xs sm:text-sm">
+                          {Math.floor(song.duration / 60)}:{(song.duration % 60).toString().padStart(2, '0')}
                         </span>
-                        <button className="p-2 rounded-full">
-                          <PlayCircle className="w-5 h-5" />
+                        <button className="p-1 sm:p-2 rounded-full">
+                          <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                         </button>
                       </div>
                     </li>
@@ -116,19 +122,29 @@ export default function searchComponent() {
           )}
         </div>
         {albums && (
-          <div className="mt-8 border p-4 rounded-xl">
-            <h2 className="text-2xl font-bold mb-4">Albums</h2>
-              <div className="flex gap-4 pb-4 overflow-x-scroll">
+          <div className="mt-6 w-[95vw] sm:w-full sm:mt-8 border p-4 rounded-xl">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4">Albums</h2>
+            <ScrollArea className="w-full">
+              <div className="flex gap-4 pb-4 overflow-x-auto">
                 {albums.map((album, index) => (
-                  <div onClick={()=>{handleAlbumsClick(album.id)}} key={index} className="bg-secondary rounded-2xl p-4 flex flex-col items-center flex-shrink-0">
-                    <img src={album.image[2].url} alt={album.name} className="w-32 h-32 object-cover rounded-lg mb-2" />
-                    <Label className="text-center w-32">{album.name}</Label>
+                  <div
+                    onClick={() => handleAlbumsClick(album.id)}
+                    key={index}
+                    className="bg-secondary rounded-2xl p-3 sm:p-4 flex flex-col items-center flex-shrink-0"
+                  >
+                    <img
+                      src={album.image[2].url}
+                      alt={album.name}
+                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg mb-2"
+                    />
+                    <Label className="text-center w-24 sm:w-32 text-xs sm:text-sm">{album.name}</Label>
                   </div>
                 ))}
               </div>
+            </ScrollArea>
           </div>
         )}
-    <RandomArtists search={search}/>
+        <RandomArtists search={search} />
       </div>
     </div>
   </ScrollArea>

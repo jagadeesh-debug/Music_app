@@ -22,10 +22,17 @@ function MusicPlayer() {
       setSong(res.data.data[0])
       getImageColors(res.data.data[0].image[2].url)
       .then(({ averageColor, dominantColor })=>{setBgColor({bg1:averageColor,bg2:dominantColor})})
+        setIsPlaying(true)
       } catch(error){
         console.log(error)
       }
     }
+    // async function songSuggestion() {
+    //   const res = await Api(`/api/songs/${value}/suggestions`)
+    //   console.log(res.data)
+      
+    // }
+    // songSuggestion()
     fetchSong()
   },[value])
   const handlePlayPause = () => setIsPlaying(!isPlaying);
