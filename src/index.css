@@ -44,6 +44,8 @@
     scrollbar-track-color: #1e1e1e;
     scrollbar-arrow-color: #888;
     scrollbar-shadow-color: #1e1e1e;
+    max-height: 100dvh;
+    overflow: hidden;
   }
 }
 ::-webkit-scrollbar {

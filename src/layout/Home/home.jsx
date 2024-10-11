@@ -25,10 +25,11 @@ export default function home() {
     navigate(path)
   },[])
   return (
-    <>
-<div>
+
+<div >
+  <div className="flex justify-evenly">
 <Sidebar/>
-<form className="sticky top-0 z-10 p-2 sm:p-4 shadow-md bg-background" onSubmit={handleSubmit}>
+<form className="sticky ml-10 top-0 z-10 p-2 sm:p-4 shadow-md bg-background w-[90vw]" onSubmit={handleSubmit}>
       <div className="max-w-3xl mx-auto flex justify-center items-center gap-2 sm:gap-3">
         <Input
           placeholder="Search for music..."
@@ -40,11 +41,11 @@ export default function home() {
         </button>
       </div>
     </form>
+    </div>
   <Suspense fallback={<div>...Loading</div>}>
   <Outlet/>
   </Suspense>
   <MusicPlayer/>
 </div>
-    </>
   )
 }

@@ -62,7 +62,7 @@ export default function searchComponent() {
         navigate(path)
   }
   return (
-    <ScrollArea className="h-[80vh] w-full flex">
+    <ScrollArea className="h-[90vh] w-full flex">
     <div className="flex flex-col w-full">
       <div className="max-w-7xl mx-auto sm:p-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">

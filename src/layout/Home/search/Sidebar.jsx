@@ -16,7 +16,7 @@ const Sidebar = () => {
     <>
       <Button 
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 p-2 bg-background"
+        className="fixed top-2 left-2 z-50 p-2 bg-background"
         variant="outline"
         size="icon">
         {isOpen ? <X size={24} /> : <Menu size={24} />}
