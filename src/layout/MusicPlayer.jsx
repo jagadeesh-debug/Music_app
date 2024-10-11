@@ -80,7 +80,7 @@ function MusicPlayer() {
       <Drawer >
         <DrawerTrigger asChild>
           <Button variant="outline" className={`absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s] ${isPlaying? "animate-spin": ""} rounded-full`}>{
-            <img className="rounded-full" src={song?.image[1].url} alt="Song" />
+            <img className="rounded-full" src={song?.image[1].url} alt="Song" loading='lazy' />
             }</Button>
         </DrawerTrigger>
         <DrawerContent className="h-[15dvh]">
@@ -96,6 +96,7 @@ function MusicPlayer() {
                   <img
                     src={song?.image[2].url}
                     alt={song?.name}
+                    loading='lazy'
                     className="w-12 h-12 rounded-md"
                   />
                   <div>

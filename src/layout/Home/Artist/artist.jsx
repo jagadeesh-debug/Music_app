@@ -37,6 +37,7 @@ function artist () {
             <img 
               src={data.image[2].url} 
               alt={data.name} 
+              loading='lazy'
               className="w-full md:w-48 h-auto rounded-xl object-cover"
             />
             <div className="flex-1">
@@ -54,7 +55,7 @@ function artist () {
               <div className="flex items-center justify-between p-3">
                 <div className="flex items-center space-x-4">
                   <p className="text-sm">{index+1}.</p>
-                  <img className="w-12 h-12 rounded-md" src={song.image[1].url} alt={song.name} />
+                  <img className="w-12 h-12 rounded-md" loading='lazy' src={song.image[1].url} alt={song.name} />
                   <span className="font-medium">{song.name}</span>
                 </div>
                 <span className="text-sm text-gray-500">

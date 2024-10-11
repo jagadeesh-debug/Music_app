@@ -74,6 +74,7 @@ export default function searchComponent() {
                   <img
                     src={globalResult?.topQuery?.results[0].image[2].url}
                     alt={globalResult?.topQuery?.results[0].title}
+                    loading='lazy'
                     className="w-full max-w-[200px] sm:max-w-[250px] mx-auto mb-4 rounded shadow-lg"
                   />
                   <h3 className="text-lg sm:text-xl font-semibold text-center mb-2">
@@ -99,6 +100,7 @@ export default function searchComponent() {
                         <img
                           src={song.image ? song.image[2].url : "/api/placeholder/40/40"}
                           alt={song.name}
+                          loading='lazy'
                           className="w-8 h-8 sm:w-10 sm:h-10 rounded"
                         />
                         <div>
@@ -135,6 +137,7 @@ export default function searchComponent() {
                     <img
                       src={album.image[2].url}
                       alt={album.name}
+                      loading='lazy'
                       className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg mb-2"
                     />
                     <Label className="text-center w-24 sm:w-32 text-xs sm:text-sm">{album.name}</Label>

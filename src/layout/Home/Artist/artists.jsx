@@ -42,6 +42,7 @@ function RandomArtists ({search}){
               <img
                 src={artist.image[2].url}
                 alt={artist.name}
+                loading='lazy'
                 className="w-32 h-32 object-cover rounded-lg mt-2 transition-transform duration-200 group-hover:scale-105"
               />
             ) : (
