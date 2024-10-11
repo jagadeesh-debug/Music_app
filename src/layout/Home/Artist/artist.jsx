@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Api from "../../../Api";
 import { Card, CardContent } from '../../../components/ui/card';
 import { getImageColors } from "../../color/ColorGenrator";
-
+import { ScrollArea } from "../../../components/ui/scroll-area";
 function artist () {
     const [data,setData]= useState()
     const [bgColor,setBgColor] = useState()
@@ -29,7 +29,7 @@ function artist () {
         )
     }
     return (
-        <>
+        <ScrollArea className="h-[100dvh]">
     <div className="container mx-auto p-4 space-y-6">
       <Card className="overflow-hidden bg-gradient-to-b " style={{background: `linear-gradient(${bgColor?.bg1} 0%,${bgColor?.bg2} 100%)` }}>
         <CardContent className="p-6">
@@ -67,7 +67,7 @@ function artist () {
       </div>
     </div>
         
-        </>
+        </ScrollArea>
     )
 }
 

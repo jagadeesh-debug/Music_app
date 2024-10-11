@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 import Api from '../../../Api'
 import { useMain } from '../../../Context';
 import { getImageColors } from '../../color/ColorGenrator';
-
+import {ScrollArea} from '../../../components/ui/scroll-area'
 
 export default function Album() {
   const [albumData,setAlbumData] = useState(null)
@@ -27,14 +27,15 @@ export default function Album() {
     }
     fetching()
   },[albumId])
+  console.log(albumData)
   return (
+    <ScrollArea className='h-[100dvh]'>
     <div className=" text-white p-8 font-sans" style={{background: `linear-gradient(${bgColor?.bg1} 0%,${bgColor?.bg2} 100%)` }}>
     <div className="flex items-start space-x-6 mb-8">
       <img src={albumData?.image[2].url} alt="Album cover" className="w-48 h-48 rounded-lg shadow-lg" />
       <div>
-        <p className="text-sm mb-2">Single</p>
-        <h1 className="text-7xl font-bold mb-4">{albumData?.name}</h1>
-        <p className="text-sm">{Math.floor(albumData?.duration/60)}:{(albumData?.duration%60).toString().padStart(2, '0')}</p>
+        <h1 className="text-2xl sm:text-7xl font-bold mb-4">{albumData?.name}</h1>
+        <p className="text-sm">{albumData?.description}</p>
       </div>
     </div>
     
@@ -71,5 +72,6 @@ export default function Album() {
       </tbody>
     </table>
   </div>
+  </ScrollArea>
   )
 }
