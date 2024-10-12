@@ -4,10 +4,12 @@ import Api from "../../../Api";
 import { Card, CardContent } from '../../../components/ui/card';
 import { getImageColors } from "../../color/ColorGenrator";
 import { ScrollArea } from "../../../components/ui/scroll-area";
+import { useMain } from "../../../Context";
 function artist () {
     const [data,setData]= useState()
     const [bgColor,setBgColor] = useState()
     let url = useLocation()
+    const {setValue} = useMain()
     const artistId = url.search.split('=')[1];
     useEffect(() => {
         const fetching = async () => {
@@ -30,7 +32,7 @@ function artist () {
     }
     return (
         <ScrollArea className="h-[100dvh]">
-    <div className="container mx-auto p-4 space-y-6">
+    <div className="container mx-auto p-4 space-y-6 mb-[15dvh]">
       <Card className="overflow-hidden bg-gradient-to-b " style={{background: `linear-gradient(${bgColor?.bg1} 0%,${bgColor?.bg2} 100%)` }}>
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-6">
@@ -51,7 +53,7 @@ function artist () {
         <h2 className="text-2xl font-semibold">Top Songs</h2>
         <ul className="space-y-2">
           {data.topSongs.map((song, index) => (
-            <li key={index} className=" rounded-lg hover:bg-secondary transition-colors duration-300">
+            <li key={index} onClick={()=>setValue(song.id)} className=" rounded-lg hover:bg-secondary transition-colors duration-300">
               <div className="flex items-center justify-between p-3">
                 <div className="flex items-center space-x-4">
                   <p className="text-sm">{index+1}.</p>

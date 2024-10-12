@@ -138,7 +138,7 @@ export default function searchComponent() {
                       src={album.image[2].url}
                       alt={album.name}
                       loading='lazy'
-                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg mb-2"
+                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover hover:scale-105 transition-all rounded-lg mb-2"
                     />
                     <Label className="text-center w-24 sm:w-32 text-xs sm:text-sm">{album.name}</Label>
                   </div>

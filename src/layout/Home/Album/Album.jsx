@@ -27,12 +27,11 @@ export default function Album() {
     }
     fetching()
   },[albumId])
-  console.log(albumData)
   return (
     <ScrollArea className='h-[100dvh]'>
-    <div className=" text-white p-8 font-sans" style={{background: `linear-gradient(${bgColor?.bg1} 0%,${bgColor?.bg2} 100%)` }}>
+    <div className=" text-white p-8 font-sans mb-[15dvh]" style={{background: `linear-gradient(${bgColor?.bg1} 0%,${bgColor?.bg2} 100%)` }}>
     <div className="flex items-start space-x-6 mb-8">
-      <img src={albumData?.image[2].url} alt="Album cover" className="w-48 h-48 rounded-lg shadow-lg" loading='lazy'/>
+      <img src={albumData?.image[2].url} alt="Album cover" className="w-48 h-48 rounded-lg shadow-lg " loading='lazy'/>
       <div>
         <h1 className="text-2xl sm:text-7xl font-bold mb-4">{albumData?.name}</h1>
         <p className="text-sm">{albumData?.description}</p>
@@ -61,7 +60,8 @@ export default function Album() {
       </thead>
       <tbody>
         {songs?.map((song,index) => (
-          <tr onClick={()=>setValue(song.id)} key={index} className=" hover:bg-gray-800">
+          <tr onClick={()=>setValue(song.id)} key={index} className=" hover:bg-secondary transition-colors ">
+          
             <td className="py-3">{index+1}</td>
             <td>
               <p className="font-medium">{song.name}</p>
