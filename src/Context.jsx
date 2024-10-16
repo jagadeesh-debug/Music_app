@@ -3,10 +3,11 @@ import { createContext, useState, useContext} from "react";
 
 const MyContext = createContext();
 const MyProvider = ({ children }) => {
-    const [value,setValue] = useState(null)
-  
+    const [musicId,setMusicId] = useState(null)
+    const [isUser,setIsUser] = useState(false)
+
     return (
-      <MyContext.Provider value={{value,setValue}}>
+      <MyContext.Provider value={{musicId,setMusicId,isUser,setIsUser}}>
         {children}
       </MyContext.Provider>
     );

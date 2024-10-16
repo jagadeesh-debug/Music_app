@@ -1,9 +1,9 @@
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./layout/Home/home";
-import Artist from "./layout/Home/Artist/artist";
-import Search from "./layout/Home/search/Search";
-import Album from "./layout/Home/Album/Album";
+import Home from "./components/home";
+import Artist from "./components/Artist/artist";
+import SearchComponent from "./components/search/Search";
+import Album from "./components/Album/Album";
 
 function App() {
 
@@ -18,7 +18,7 @@ function App() {
       },
       {
         path:"/search",
-        element:<Search/>
+        element:<SearchComponent/>
       },
       {
         path: "/album",

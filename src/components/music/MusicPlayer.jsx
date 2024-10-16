@@ -11,12 +11,13 @@ import {
   Shuffle,
 } from "lucide-react";
 import ReactPlayer from "react-player";
-import Api from "../Api";
-import { useMain } from "../Context";
-import { getImageColors } from "./color/ColorGenrator";
-import { Drawer, DrawerContent, DrawerTrigger } from "../components/ui/drawer";
+import Api from "../../Api";
+import { useMain } from "../../Context"
+import { getImageColors } from "../color/ColorGenrator";
+import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
+import { Button } from "../ui/button";
 
-import { Button } from "../components/ui/button";
+
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
@@ -26,11 +27,11 @@ function MusicPlayer() {
   const [bgColor, setBgColor] = useState();
   const playerRef = useRef(null);
   const [song, setSong] = useState();
-  const { value } = useMain();
+  const { musicId } = useMain();
   useEffect(() => {
     async function fetchSong() {
       try {
-        const res = await Api(`/api/songs/${value}`);
+        const res = await Api(`/api/songs/${musicId}`);
         setSong(res.data.data[0]);
         getImageColors(res.data.data[0].image[2].url).then(
           ({ averageColor, dominantColor }) => {
@@ -49,7 +50,7 @@ function MusicPlayer() {
     // }
     // songSuggestion()
     fetchSong();
-  }, [value]);
+  }, [musicId]);
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     setVolume(parseFloat(e.target.value));

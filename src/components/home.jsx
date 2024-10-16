@@ -1,8 +1,8 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
-import { Input } from "../../components/ui/input";
-import MusicPlayer from "../MusicPlayer";
+import { Input } from "./ui/input";
+import MusicPlayer from "./music/MusicPlayer";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./search/Sidebar";
 import { useRef } from "react";

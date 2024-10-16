@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from "../../../components/ui/button"
+import { Button } from '../ui/button';
 import { Home, Menu, X, Settings, HelpCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 const Sidebar = () => {

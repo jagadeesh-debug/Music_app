@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import Api from "../../../Api";
-import { Label } from "../../../components/ui/label";
-import { Card , CardContent} from "../../../components/ui/card";
+import Api from "../../Api";
+import { Label } from "../ui/label";
+import { Card , CardContent} from "../ui/card";
 import { PlayCircle } from 'lucide-react';
-import { ScrollArea } from "../../../components/ui/scroll-area";
+import { ScrollArea } from "../ui/scroll-area";
 import { useNavigate , createSearchParams, useLocation } from "react-router-dom";
-import { useMain } from "../../../Context";
+import { useMain } from "../../Context";
 import RandomArtists from "../Artist/artists";
 
 
-export default function searchComponent() {
-  const {value,setValue} = useMain();
+export default function SearchComponent() {
+  const {value,setMusicId} = useMain();
   const url = useLocation()
   const search=url.search.split('=')[1].replace("+"," ")
   const [albums, setAlbums] = useState();
@@ -32,7 +32,7 @@ export default function searchComponent() {
         const res = await Api(`/api/search/songs?query=${search}`)
         setSongs(res.data.data.results)
         if(value==null){
-        setValue(res.data.data.results[0].id)
+        setMusicId(res.data.data.results[0].id)
         }
       } catch (error) {
         console.log(error);
@@ -52,7 +52,7 @@ export default function searchComponent() {
     fetchingAlbum()
   },[url,search])
   function handleSongClick(songId){
-    setValue(songId)
+    setMusicId(songId)
   }
   function handleAlbumsClick( Id ){ 
       const   path={

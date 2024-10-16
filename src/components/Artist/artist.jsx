@@ -1,15 +1,15 @@
 import React, { useEffect, useState }  from "react";
 import { useLocation } from "react-router-dom";
-import Api from "../../../Api";
-import { Card, CardContent } from '../../../components/ui/card';
-import { getImageColors } from "../../color/ColorGenrator";
-import { ScrollArea } from "../../../components/ui/scroll-area";
-import { useMain } from "../../../Context";
-function artist () {
+import Api from "../../Api";
+import { Card, CardContent } from '../ui/card';
+import { getImageColors } from "../color/ColorGenrator";
+import { ScrollArea } from "../ui/scroll-area";
+import { useMain } from "../../Context";
+function Artist () {
     const [data,setData]= useState()
     const [bgColor,setBgColor] = useState()
     let url = useLocation()
-    const {setValue} = useMain()
+    const {setMusicId} = useMain()
     const artistId = url.search.split('=')[1];
     useEffect(() => {
         const fetching = async () => {
@@ -53,7 +53,7 @@ function artist () {
         <h2 className="text-2xl font-semibold">Top Songs</h2>
         <ul className="space-y-2">
           {data.topSongs.map((song, index) => (
-            <li key={index} onClick={()=>setValue(song.id)} className=" rounded-lg hover:bg-secondary transition-colors duration-300">
+            <li key={index} onClick={()=>setMusicId(song.id)} className=" rounded-lg hover:bg-secondary transition-colors duration-300">
               <div className="flex items-center justify-between p-3">
                 <div className="flex items-center space-x-4">
                   <p className="text-sm">{index+1}.</p>
@@ -74,4 +74,4 @@ function artist () {
     )
 }
 
-export default artist
+export default Artist
