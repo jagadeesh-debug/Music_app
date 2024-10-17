@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
-import { Home, Menu, X, Settings, HelpCircle } from 'lucide-react';
+import { Home, Menu, X, List, User} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useMain } from '../../Context';  
+import { Dialog ,DialogContent } from "../ui/dialog"
+import AuthTab from '../../Auth/AuthTab';
+
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
+  const [dialogOpen,setDialogOpen] = useState(false)
+  const {isUser} = useMain()
   const navigate= useNavigate()
-  const menuItems = [
-    { icon: Home, label: 'Home' },
-    { icon: Settings, label: 'Settings' },
-    { icon: HelpCircle, label: 'Help' },
-  ];
 
+function handlePlaylist () {
+  if(isUser){
+    navigate('/playlist')
+  }
+  else{
+    setDialogOpen(true)
+    setIsOpen(false)
+  }
+}
   return (
     <>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+    <DialogContent>
+    <AuthTab/>
+    </DialogContent>
+    </Dialog>
       <Button 
         onClick={toggleSidebar}
         className="fixed top-2 left-2 z-50 p-2 bg-background"
@@ -29,17 +44,22 @@ const Sidebar = () => {
       >
         <nav className="flex flex-col h-full pt-16">
           <ul className="flex-grow space-y-2 p-4">
-            {menuItems.map((item, index) => (
-              <li key={index}>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start text-lg py-6"
-                >
-                  <item.icon size={32} className="mr-4" />
-                  {item.label}
+              <li>
+                <Button variant="ghost" className="w-full justify-start text-lg py-6">
+                 <Home size={32} className='mr-4'/> Home
                 </Button>
               </li>
-            ))}
+              <li>
+                <Button variant="ghost" onClick={handlePlaylist} className="w-full justify-start text-lg py-6">
+                <List size={32} className='mr-4'/>  Playlist 
+                </Button>
+              </li>
+              <li>
+                <Button variant="ghost" className="w-full justify-start text-lg py-6">
+                <User size={32} className='mr-4'/>  About me
+                </Button>
+              </li>
+
           </ul>
           <div className="p-4 border-t">
             <p className="text-sm ">© 2024 Anmol Singh</p>

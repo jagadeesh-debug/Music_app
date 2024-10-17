@@ -4,7 +4,7 @@ import Home from "./components/home";
 import Artist from "./components/Artist/artist";
 import SearchComponent from "./components/search/Search";
 import Album from "./components/Album/Album";
-
+import Playlist from "./components/Playlist";
 function App() {
 
  const router = createBrowserRouter([
@@ -23,6 +23,10 @@ function App() {
       {
         path: "/album",
         element : <Album/>
+      },
+      {
+        path: "/playlist",
+        element: <Playlist/>
       }
     ]
   },

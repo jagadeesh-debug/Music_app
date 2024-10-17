@@ -38,7 +38,7 @@ function MusicPlayer() {
             setBgColor({ bg1: averageColor, bg2: dominantColor });
           }
         );
-        setIsPlaying(true);
+        // setIsPlaying(true);
       } catch (error) {
         console.log(error);
       }
@@ -80,7 +80,7 @@ function MusicPlayer() {
     <>
       <Drawer >
         <DrawerTrigger asChild>
-          <Button variant="outline" className={`absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s] ${isPlaying? "animate-spin": ""} rounded-full`}>{
+          <Button variant="outline" className={` absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s] ${isPlaying? "animate-spin": ""} rounded-full`}>{
             <img className="rounded-full" src={song?.image[1].url} alt="Song" loading='lazy' />
             }</Button>
         </DrawerTrigger>
