@@ -7,22 +7,33 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./search/Sidebar";
 import { useRef } from "react";
 import { createSearchParams , useSearchParams } from "react-router-dom";
+import { getAuth , onAuthStateChanged } from "firebase/auth";
+import app from "../Auth/firebase";
+import { useMain } from "../Context";
 export default function home() {
-  const [searchTxt , setSearchTxt] = useState("parmish verma")
+  const [searchTxt , setSearchTxt] = useState(localStorage.getItem('search')||"permish verma")
   const inputRef= useRef()
   const [searchQuery,setSearchQuery] = useSearchParams()
   const navigate = useNavigate()
+  const {setIsUser} = useMain()
   function handleSubmit(e) {
     e.preventDefault();
     const search = inputRef.current.value;
     setSearchQuery({search})
+    localStorage.setItem('search',search)
   }
   useEffect(()=>{
-    const path={
-      pathname:"/search",
-      search: createSearchParams({searchTxt}).toString()
-    }
-    navigate(path)
+    const auth = getAuth(app)
+    const pathName= `/search?searchTxt=${localStorage.getItem('search')}`
+    onAuthStateChanged(auth, (user)=>{
+      if(user){
+        console.log(user)
+        setIsUser(true)
+      }
+    })
+
+    navigate(pathName)
+
   },[])
   return (
 
@@ -35,6 +46,7 @@ export default function home() {
           placeholder="Search for music..."
           className="text-sm sm:text-base md:text-lg flex-grow"
           ref={inputRef}
+          type="search"
         />
         <button type="submit" className="p-1 sm:p-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
           <Search className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />

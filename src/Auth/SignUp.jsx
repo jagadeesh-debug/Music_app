@@ -4,7 +4,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
 import { useMain } from "../Context";
-import app from "./firebase";
+import  app  from "./firebase";
 
 function SignUp() {
   const auth = getAuth(app);
@@ -13,7 +13,7 @@ function SignUp() {
   const confPassword = useRef();
   const { setIsUser } = useMain();
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (password.current.value == confPassword.current.value) {
       try {
         createUserWithEmailAndPassword(
@@ -25,6 +25,7 @@ function SignUp() {
         });
       } catch (error) {}
     } else {
+      console.log("password not match")
     }
   };
   return (

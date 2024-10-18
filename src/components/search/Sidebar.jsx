@@ -42,12 +42,11 @@ function handlePlaylist () {
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <nav className="flex flex-col h-full pt-16">
+        <nav className="flex flex-col h-full pt-16 shadow-2xl">
           <ul className="flex-grow space-y-2 p-4">
               <li>
-                <Button variant="ghost" className="w-full justify-start text-lg py-6">
-                 <Home size={32} className='mr-4'/> Home
-                </Button>
+                <Button onClick={()=>(navigate(`/search?searchTxt=${localStorage.getItem('search')}`))} variant="ghost" className="w-full justify-start text-lg py-6">
+                 <Home size={32} className='mr-4'/> Home</Button>
               </li>
               <li>
                 <Button variant="ghost" onClick={handlePlaylist} className="w-full justify-start text-lg py-6">

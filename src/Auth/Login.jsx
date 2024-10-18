@@ -14,13 +14,15 @@ const password = useRef()
 const {setIsUser} = useMain();
 const handleSubmit = (e) => {
   e.preventDefault()
+  console.log("form")
 try{
 signInWithEmailAndPassword(auth, email.current.value, password.current.value)
-  .then(() => {
+  .then((user) => {
     setIsUser(true)
+    console.log(user)
   })
 } catch(error) {
-
+  console.log(error)
 }
 }
 return (
@@ -29,11 +31,11 @@ return (
         <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4 w-full">
             <div className="w-full">
             <Label>Email</Label>
-            <Input type="email"/>
+            <Input type="email" ref={email}/>
             </div>
             <div className="w-full">
             <Label>Password</Label>
-            <Input type="password"/>
+            <Input type="password" ref={password}/>
             </div>
             <Button type="submit">Submit</Button>
         </form>
