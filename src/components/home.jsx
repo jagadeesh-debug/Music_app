@@ -24,7 +24,7 @@ export default function home() {
   }
   useEffect(()=>{
     const auth = getAuth(app)
-    const pathName= `/search?searchTxt=${localStorage.getItem('search')}`
+    const pathName= `/search?searchTxt=${localStorage.getItem('search')||"parmish+verma"}`
     onAuthStateChanged(auth, (user)=>{
       if(user){
         console.log(user)
