@@ -1,56 +1,29 @@
 import React, { useState, useEffect } from "react";
-import Api from "../../Api";
 import { Label } from "../ui/label";
 import { Card , CardContent} from "../ui/card";
 import { PlayCircle } from 'lucide-react';
 import { ScrollArea } from "../ui/scroll-area";
 import { useNavigate , createSearchParams, useLocation } from "react-router-dom";
-import { useMain } from "../../Context";
-import RandomArtists from "../Artist/artists";
 
+import RandomArtists from "../Artist/artists";
+import { useFetch , useStore } from "../../zustand/store";
 
 export default function SearchComponent() {
-  const {value,setMusicId} = useMain();
+  const {fetchSongs,songs,fetchAlbums,albums} = useFetch();
+  const {setMusicId} = useStore();
   const url = useLocation()
   const search=url.search.split('=')[1].replace("+"," ")
-  const [albums, setAlbums] = useState();
-  const [globalResult,setGlobalResult] = useState()
-  const [songs,setSongs]= useState()
   const navigate =  useNavigate()
-  useEffect(()=>{
-    async  function  fetchingGlobal() {
-      try {
-        const res = await Api(`/api/search?query=${search}`)
-        setGlobalResult(res.data.data)
-      } catch (error) {
-        console.log(error);
-      }
+  useEffect( ()=>{
+    fetchAlbums(search)
+    fetchSongs(search)
+    try {
+      setMusicId(songs[0]?.id)
+    } catch (error) {
+      
     }
-  
-    async  function  fetchingSong() {
-      try {
-        const res = await Api(`/api/search/songs?query=${search}`)
-        setSongs(res.data.data.results)
-        if(value==null){
-        setMusicId(res.data.data.results[0].id)
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  
-   async function fetchingAlbum() {
-      try {
-        const res = await Api(`/api/search/albums?query=${search}`);
-        setAlbums(res.data.data.results)
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchingGlobal()
-    fetchingSong()
-    fetchingAlbum()
   },[url,search])
+
   function handleSongClick(songId){
     setMusicId(songId)
   }
@@ -66,25 +39,25 @@ export default function SearchComponent() {
     <div className="flex flex-col w-full">
       <div className="max-w-7xl mx-auto sm:p-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-          {globalResult?.topQuery.results[0] && (
+          {songs!== null && (
             <div className="w-[90vw] sm:w-full lg:w-1/3 ">
               <h2 className="text-xl sm:text-2xl font-bold mb-4">Top Result</h2>
               <Card>
                 <CardContent className="p-4 sm:p-6">
                   <img
-                    src={globalResult?.topQuery?.results[0].image[2].url}
-                    alt={globalResult?.topQuery?.results[0].title}
+                    src={songs[0].image[2].url}
+                    alt={songs[0].name}
                     loading='lazy'
                     className="w-full max-w-[200px] sm:max-w-[250px] mx-auto mb-4 rounded shadow-lg"
                   />
                   <h3 className="text-lg sm:text-xl font-semibold text-center mb-2">
-                    {globalResult?.topQuery?.results[0].title || globalResult?.songs.results[0].title}
+                    {songs[0].name||"hello"}
                   </h3>
                 </CardContent>
               </Card>
             </div>
           )}
-          {songs && (
+          {songs!==null && (
             <div className="w-[95vw] sm:w-full lg:w-2/3 border rounded-xl p-4">
               <h2 className="text-xl sm:text-2xl font-bold mb-4">Songs</h2>
               <ScrollArea className="h-[40vh] sm:h-[50vh]">

@@ -12,11 +12,10 @@ import {
 } from "lucide-react";
 import ReactPlayer from "react-player";
 import Api from "../../Api";
-import { useMain } from "../../Context"
 import { getImageColors } from "../color/ColorGenrator";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
 import { Button } from "../ui/button";
-
+import { useStore } from "../../zustand/store";
 
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -27,9 +26,11 @@ function MusicPlayer() {
   const [bgColor, setBgColor] = useState();
   const playerRef = useRef(null);
   const [song, setSong] = useState();
-  const { musicId } = useMain();
+  const { musicId } = useStore();
   useEffect(() => {
     async function fetchSong() {
+      // console.log(musicId)
+      if(musicId){
       try {
         const res = await Api(`/api/songs/${musicId}`);
         setSong(res.data.data[0]);
@@ -42,6 +43,7 @@ function MusicPlayer() {
       } catch (error) {
         console.log(error);
       }
+    }
     }
     // async function songSuggestion() {
     //   const res = await Api(`/api/songs/${value}/suggestions`)

@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
-import { useMain } from "../Context";
+import { useStore } from "../zustand/store";
 import  app  from "./firebase";
 
 function SignUp() {
@@ -11,7 +11,7 @@ function SignUp() {
   const email = useRef();
   const password = useRef();
   const confPassword = useRef();
-  const { setIsUser } = useMain();
+  const { setIsUser } = useStore();
   const handleSubmit = (e) => {
     e.preventDefault()
     if (password.current.value == confPassword.current.value) {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Home, Menu, X, List, User} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useMain } from '../../Context';  
+import { useStore } from '../../zustand/store'; 
 import { Dialog ,DialogContent } from "../ui/dialog"
 import AuthTab from '../../Auth/AuthTab';
 
@@ -10,7 +10,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
   const [dialogOpen,setDialogOpen] = useState(false)
-  const {isUser} = useMain()
+  const {isUser} = useStore()
   const navigate= useNavigate()
 
 function handlePlaylist () {

@@ -4,12 +4,12 @@ import Api from "../../Api";
 import { Card, CardContent } from '../ui/card';
 import { getImageColors } from "../color/ColorGenrator";
 import { ScrollArea } from "../ui/scroll-area";
-import { useMain } from "../../Context";
+import { useStore } from "../../zustand/store";
 function Artist () {
     const [data,setData]= useState()
     const [bgColor,setBgColor] = useState()
     let url = useLocation()
-    const {setMusicId} = useMain()
+    const {setMusicId} = useStore()
     const artistId = url.search.split('=')[1];
     useEffect(() => {
         const fetching = async () => {

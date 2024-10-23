@@ -1,21 +1,13 @@
 import Api from "../../Api";
 import React, { useEffect, useState } from "react";
 import { useNavigate , createSearchParams  } from "react-router-dom";
+import { useFetch } from "../../zustand/store";
 function RandomArtists ({search}){
   const navigate = useNavigate();
-    const [artists,setArtists] = useState([])
+  const {artists,fetchArtists}= useFetch()
     useEffect(()=>{
-        const artist = async () => {
-            try{
-          const res = await Api.get(`/api/search/artists?query=${search||"top artists"} `)
-          const data = res.data.data.results;
-           if(data) setArtists(data)
-            } catch{(error)=>{
-                console.log(error)
-            }}
-            
-        }
-        artist()
+        fetchArtists(search)
+
     },[search])
     function handleClick (Id) { 
       const path = {
@@ -37,10 +29,10 @@ function RandomArtists ({search}){
           onClick={() => handleClick(artist.id)}
         >
           <div className="flex flex-col items-center aspect-square mb-2 overflow-hidden rounded-lg">
-            {artist.image && artist.image[2] ? (
+            {artist?.image && artist?.image[2] ? (
               <img
-                src={artist.image[2].url}
-                alt={artist.name}
+                src={artist?.image[2].url}
+                alt={artist?.name}
                 loading='lazy'
                 className="w-32 h-32 object-cover rounded-lg mt-2 transition-transform duration-200 group-hover:scale-105"
               />
@@ -51,7 +43,7 @@ function RandomArtists ({search}){
             )}
           </div>
           <h3 className="text-sm font-medium truncate text-center">
-            {artist.name}
+            {artist?.name}
           </h3>
         </div>
       ))}

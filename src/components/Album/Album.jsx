@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Play, Plus, MoreHorizontal, Clock } from 'lucide-react';
 import { useLocation } from 'react-router-dom'
 import Api from '../../Api';
-import { useMain } from '../../Context';
+import { useStore } from '../../zustand/store';
 import { getImageColors } from '../color/ColorGenrator';
 import {ScrollArea} from "../ui/scroll-area"
 
 export default function Album() {
   const [albumData,setAlbumData] = useState(null)
   const url = useLocation()
-  const {setMusicId} = useMain()
+  const {setMusicId} = useStore()
   const albumId = url?.search.split('=')[1];
   const [songs,setSongs]= useState(null)
   const  [bgColor, setBgColor]= useState()
