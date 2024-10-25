@@ -38,7 +38,7 @@ function handlePlaylist () {
       </Button>
 
       <div 
-        className={`fixed top-0 left-0 h-full w-64 z-30  shadow-lg transform transition-transform bg-background duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-48 sm:w-64 z-30  shadow-lg transform transition-transform bg-background duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
