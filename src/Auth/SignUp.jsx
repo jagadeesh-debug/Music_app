@@ -4,14 +4,15 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
 import { useStore } from "../zustand/store";
-import  app  from "./firebase";
-
+import  {app}  from "./firebase";
+import { useNavigate } from "react-router-dom";
 function SignUp() {
   const auth = getAuth(app);
   const email = useRef();
   const password = useRef();
   const confPassword = useRef();
-  const { setIsUser } = useStore();
+  const { setIsUser , setDialogOpen } = useStore();
+  const navigate = useNavigate()
   const handleSubmit = (e) => {
     e.preventDefault()
     if (password.current.value == confPassword.current.value) {
@@ -21,6 +22,7 @@ function SignUp() {
           email.current.value,
           password.current.value
         ).then(() => {
+          setDialogOpen(false)
           setIsUser(true);
         });
       } catch (error) {}

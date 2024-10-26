@@ -65,7 +65,7 @@ export default function SearchComponent() {
                   {songs.map((song, index) => (
                     <li
                       key={index}
-                      className="flex items-center justify-between p-2 sm:p-3 rounded-lg transition-colors hover:bg-secondary"
+                      className="flex items-center justify-between p-2 sm:p-3 rounded-lg transition-all hover:bg-secondary hover:scale-105 "
                       onClick={() => handleSongClick(song.id)}
                     >
                       <div className="flex items-center space-x-2 sm:space-x-4">

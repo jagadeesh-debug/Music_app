@@ -39,7 +39,7 @@ function MusicPlayer() {
             setBgColor({ bg1: averageColor, bg2: dominantColor });
           }
         );
-        // setIsPlaying(true);
+        setIsPlaying(true);
       } catch (error) {
         console.log(error);
       }
@@ -53,6 +53,10 @@ function MusicPlayer() {
     // songSuggestion()
     fetchSong();
   }, [musicId]);
+
+  useEffect(()=>{
+    if(duration*played==duration){setIsPlaying(false)}
+  },[played])
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     setVolume(parseFloat(e.target.value));
@@ -61,7 +65,7 @@ function MusicPlayer() {
   const handleToggleMute = () => {
     return setMuted(!muted);
   };
-  const handleProgress = (state) => setPlayed(state.played);
+  const handleProgress = (state) => setPlayed(state.played) ;
   const handleDuration = (duration) => setDuration(duration);
   const handleSeekChange = (e) => {
     setPlayed(parseFloat(e.target.value));
@@ -100,7 +104,7 @@ function MusicPlayer() {
                     src={song?.image[2].url}
                     alt={song?.name}
                     loading='lazy'
-                    className="w-12 h-12 rounded-md"
+                    className="w-12 h-12 rounded-md shadow-lg"
                   />
                   <div>
                     <h3 className="text-sm font-semibold">{song?.name}</h3>
@@ -145,7 +149,7 @@ function MusicPlayer() {
                     onMouseUp={handleSeekMouseUp}
                     className="w-full h-1 bg-gray-600 rounded-full appearance-none cursor-pointer"
                     style={{
-                      background: `linear-gradient(to right, ${bgColor?.bg1} 0%, ${bgColor?.bg1} ${
+                      background: `linear-gradient(to right, #1db954 0%, #1db954 ${
                         played * 100
                       }%, #4B5563 ${played * 100}%, #4B5563 100%)`,
                     }}
@@ -168,7 +172,7 @@ function MusicPlayer() {
                     onChange={handleVolumeChange}
                     className="w-20 h-1 bg-gray-600 rounded-full appearance-none cursor-pointer"
                     style={{
-                      background: `linear-gradient(to right, ${bgColor?.bg1} 0%, ${bgColor?.bg1} ${
+                      background: `linear-gradient(to right, #1db954 0%, #1db954 ${
                         volume * 100
                       }%, #4B5563 ${volume * 100}%, #4B5563 100%)`,
                     }}

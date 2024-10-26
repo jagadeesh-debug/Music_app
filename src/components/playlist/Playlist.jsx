@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-// import { db } from "../Auth/firebase";
-import { doc, setDoc } from "firebase/firestore";
-import { Dialog, DialogContent, DialogTitle } from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import React, { useEffect, useState } from "react";
+import { db , app } from "../../Auth/firebase";
+import { addDoc,collection } from "firebase/firestore";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { getAuth } from "firebase/auth";
 export default function Playlist() {
+  const user = getAuth(app)?.currentUser
   const [isDialog, setIsDialog] = useState(false);
   const [input,setInput] = useState(null)
   async function handleSubmit (e) {
     e.preventDefault()
-      await setDoc(doc(db))
+      const collectionRef = collection(db,"users",user.uid,"playlists",input);
+      
   }
 
   return (
@@ -23,6 +26,7 @@ export default function Playlist() {
           </form>
         </DialogContent>
       </Dialog>
+      <Button>Add playlist</Button>
     </>
   );
 }

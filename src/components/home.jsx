@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./search/Sidebar";
 
 import { getAuth , onAuthStateChanged } from "firebase/auth";
-import app from "../Auth/firebase";
+import {app} from "../Auth/firebase";
 import { useStore } from "../zustand/store";
 import InputBar from "./search/InputBar";
 export default function home() {
@@ -26,6 +26,7 @@ export default function home() {
     navigate(pathName)
 
   },[])
+
   return (
 
 < >

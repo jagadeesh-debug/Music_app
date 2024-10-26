@@ -10,7 +10,7 @@ function AuthTab() {
             <TabsTrigger value="Login">LogIn</TabsTrigger>
             <TabsTrigger value="Signup">Create Account</TabsTrigger>
           </TabsList>
-          <TabsContent value="Login">
+          <TabsContent value="Login" >
             <Login/>
           </TabsContent>
           <TabsContent value="Signup">
