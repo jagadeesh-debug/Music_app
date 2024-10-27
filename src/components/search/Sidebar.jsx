@@ -5,28 +5,30 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../../zustand/store";
 import { Dialog, DialogContent } from "../ui/dialog";
 import AuthTab from "../../Auth/AuthTab";
-import { signOut,getAuth } from "firebase/auth";
+import { signOut, getAuth } from "firebase/auth";
+import {Popover,PopoverContent,PopoverTrigger,} from "@/components/ui/popover";
+import Playlist from "../playlist/Playlist";
 import { app } from "../../Auth/firebase";
 const Sidebar = () => {
-  const auth = getAuth(app)
+  const auth = getAuth(app);
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
-  const { isUser,setIsUser,dialogOpen, setDialogOpen} = useStore();
-  const navigate = useNavigate();
+  const { isUser, setIsUser, dialogOpen, setDialogOpen } = useStore();
+  const [popover,setPopover]=useState(false)
   function handlePlaylist() {
     if (isUser) {
-      setIsOpen(false)
-      navigate("/playlist");
+      setPopover(true)
     } else {
       setDialogOpen(true);
       setIsOpen(false);
+      setPopover(false)
     }
   }
   return (
     <>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
-          <AuthTab  />
+          <AuthTab />
         </DialogContent>
       </Dialog>
       <Button
@@ -59,6 +61,13 @@ const Sidebar = () => {
               </Button>
             </li>
             <li>
+              <Popover open={popover} onOpenChange={setPopover}>
+                <PopoverTrigger/>
+                <PopoverContent>
+                  
+                <Playlist/>
+                </PopoverContent>
+              </Popover>
               <Button
                 variant="ghost"
                 onClick={handlePlaylist}
@@ -77,19 +86,19 @@ const Sidebar = () => {
             </li>
             {!isUser && (
               <li>
-              <Button
-              onClick={()=>(setDialogOpen(true),setIsOpen(false))}
-                variant="ghost"
-                className="w-full justify-start text-lg py-6"
-              >
-                <User size={32} className="mr-4" /> LogIn
-              </Button>
-            </li>
+                <Button
+                  onClick={() => (setDialogOpen(true), setIsOpen(false))}
+                  variant="ghost"
+                  className="w-full justify-start text-lg py-6"
+                >
+                  <User size={32} className="mr-4" /> LogIn
+                </Button>
+              </li>
             )}
             {isUser && (
               <li>
                 <Button
-                  onClick={()=>(signOut(auth), setIsUser(false))}
+                  onClick={() => (signOut(auth), setIsUser(false))}
                   variant="ghost"
                   className="w-full text-black bg-red-400 justify-start text-lg py-6"
                 >

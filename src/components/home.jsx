@@ -9,7 +9,7 @@ import {app} from "../Auth/firebase";
 import { useStore } from "../zustand/store";
 import InputBar from "./search/InputBar";
 export default function home() {
-  // const [searchTxt , setSearchTxt] = useState(localStorage.getItem('search')||"permish verma")
+  
 
   const navigate = useNavigate()
   const {setIsUser} = useStore()
@@ -18,7 +18,6 @@ export default function home() {
     const pathName= `/search?searchTxt=${localStorage.getItem('search')||"parmish+verma"}`
     onAuthStateChanged(auth, (user)=>{
       if(user){
-        console.log(user)
         setIsUser(true)
       }
     })
@@ -29,7 +28,7 @@ export default function home() {
 
   return (
 
-< >
+<>
   <div className="flex justify-evenly">
 <Sidebar/>
     <InputBar/>

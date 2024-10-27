@@ -29,6 +29,7 @@ function MusicPlayer() {
   const { musicId } = useStore();
   useEffect(() => {
     async function fetchSong() {
+      console.log(musicId)
       // console.log(musicId)
       if(musicId){
       try {

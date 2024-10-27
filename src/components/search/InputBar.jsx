@@ -8,6 +8,7 @@ export default function InputBar() {
     const [searchQuery,setSearchQuery] = useSearchParams()
     function handleSubmit(e) {
         e.preventDefault();
+        localStorage.setItem('search',inputRef.current.value)
         const search = inputRef.current.value;
         setSearchQuery({search})
         localStorage.setItem('search',search)

@@ -17,11 +17,6 @@ export default function SearchComponent() {
   useEffect( ()=>{
     fetchAlbums(search)
     fetchSongs(search)
-    try {
-      setMusicId(songs[0]?.id)
-    } catch (error) {
-      
-    }
   },[url,search])
 
   function handleSongClick(songId){
