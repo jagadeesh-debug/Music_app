@@ -19,6 +19,7 @@ export default function InputBar() {
         <Input
           placeholder="Search for music..."
           className="text-sm sm:text-base md:text-lg flex-grow"
+          required
           ref={inputRef}
           type="search"
         />

@@ -8,6 +8,7 @@ import { getAuth , onAuthStateChanged } from "firebase/auth";
 import {app} from "../Auth/firebase";
 import { useStore } from "../zustand/store";
 import InputBar from "./search/InputBar";
+import { fetchFireStore } from "../Api";
 export default function home() {
   
 
@@ -21,6 +22,7 @@ export default function home() {
         setIsUser(true)
       }
     })
+    fetchFireStore()
 
     navigate(pathName)
 
