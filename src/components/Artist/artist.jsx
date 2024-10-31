@@ -5,7 +5,7 @@ import { Card, CardContent } from "../ui/card";
 import { getImageColors } from "../color/ColorGenrator";
 import { ScrollArea } from "../ui/scroll-area";
 import { useStore } from "../../zustand/store";
-import { BadgePlus } from 'lucide-react';
+import { BadgePlus } from "lucide-react";
 function Artist() {
   const [data, setData] = useState();
   const [bgColor, setBgColor] = useState();

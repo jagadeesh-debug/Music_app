@@ -3,6 +3,7 @@ import Home from "./components/home";
 import Artist from "./components/Artist/artist";
 import SearchComponent from "./components/search/SearchResult";
 import Album from "./components/Album/Album";
+import Plylistinfo from "./components/playlist/Plylistinfo";
 function App() {
   const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ function App() {
         {
           path: "/album",
           element: <Album />,
+        },
+        {
+          path: "/playlist",
+          element: <Plylistinfo/>
         },
       ],
     },

@@ -1,34 +1,40 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { Home, Menu, X, List, User,Baby } from "lucide-react";
-import { useEffect ,useRef} from "react";
+import { Home, Menu, X, List, User, Baby } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useStore } from "../../zustand/store";
 import { Dialog, DialogContent } from "../ui/dialog";
 import AuthTab from "../../Auth/AuthTab";
 import { signOut, getAuth } from "firebase/auth";
-import {Popover,PopoverContent,PopoverTrigger,} from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import Playlist from "../playlist/Playlists";
 import { app } from "../../Auth/firebase";
+import { useNavigate } from "react-router-dom";
 const Sidebar = () => {
+  const navigate = useNavigate();
   const sidebarRef = useRef(null);
   const auth = getAuth(app);
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
   const { isUser, setIsUser, dialogOpen, setDialogOpen } = useStore();
-  const [popover,setPopover]=useState(false)
+  const [popover, setPopover] = useState(false);
   function handlePlaylist() {
     if (isUser) {
-      setPopover(true)
+      setPopover(true);
     } else {
       setDialogOpen(true);
       setIsOpen(false);
-      setPopover(false)
+      setPopover(false);
     }
   }
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        sidebarRef.current && 
+        sidebarRef.current &&
         !sidebarRef.current.contains(event.target) &&
         !event.target.closest('button[aria-label="Toggle Sidebar"]')
       ) {
@@ -36,9 +42,9 @@ const Sidebar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -49,7 +55,7 @@ const Sidebar = () => {
           <AuthTab />
         </DialogContent>
       </Dialog>
-      
+
       <Button
         onClick={toggleSidebar}
         className="fixed top-2 left-2 z-50 p-2 bg-background"
@@ -71,7 +77,9 @@ const Sidebar = () => {
             <li>
               <Button
                 onClick={() =>
-                  navigate(`/search?searchTxt=${localStorage.getItem("search")}`)
+                  navigate(
+                    `/search?searchTxt=${localStorage.getItem("search")}`
+                  )
                 }
                 variant="ghost"
                 className="w-full justify-start text-lg py-6"
@@ -90,8 +98,12 @@ const Sidebar = () => {
                     <List size={32} className="mr-4" /> Playlist
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent>
-                  <Playlist />
+                <PopoverContent className="relative w-auto sm:w-72">
+                  <X
+                    className=" absolute top-2 right-2 "
+                    onClick={() => setPopover(false)}
+                  />
+                  <Playlist setPopover={setPopover} />
                 </PopoverContent>
               </Popover>
             </li>

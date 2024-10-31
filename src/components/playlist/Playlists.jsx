@@ -1,31 +1,44 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { db, app } from "../../Auth/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, arrayUnion, collection } from "firebase/firestore";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+import { Trash2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { getAuth } from "firebase/auth";
 import { useStore } from "../../zustand/store";
-import { fetchFireStore } from "../../Api";
-import {ScrollArea} from "../ui/scroll-area"
-export default function Playlist() {
+import { ScrollArea } from "../ui/scroll-area";
+import { useNavigate, createSearchParams } from "react-router-dom";
+import { deletePlaylist } from "../../Api";
+export default function Playlist({ setPopover }) {
+  const navigate = useNavigate();
   const user = getAuth(app)?.currentUser;
   const [isDialog, setIsDialog] = useState(false);
   const input = useRef(null);
-  const { playlist, setPlaylist,emptyPlaylist } = useStore();
+  const { playlist, setPlaylist, emptyPlaylist } = useStore();
   async function handleSubmit(e) {
     e.preventDefault();
     setIsDialog(false);
     const collectionRef = collection(db, "users", user?.uid, "playlists");
     addDoc(collectionRef, {
       name: input.current.value,
+      songs: arrayUnion(),
     });
-    setPlaylist({id:null,data:{name:input.current.value}})
+    setPlaylist({ id: null, data: { name: input.current.value } });
   }
-  useEffect(() => {
-    emptyPlaylist()
-    fetchFireStore(setPlaylist);
-  }, []);
+  // useEffect(() => {
+  //   emptyPlaylist()
+  //   fetchFireStore(setPlaylist);
+  // }, []);
+  const handleClick = (list) => {
+    const id = list?.id;
+    const path = {
+      pathname: "/playlist",
+      search: createSearchParams({ id }).toString(),
+    };
+    setPopover(false);
+    navigate(path);
+  };
   return (
     <>
       <h1 className="text-3xl border-b-2 p-2">Playlist</h1>
@@ -42,13 +55,21 @@ export default function Playlist() {
           </form>
         </DialogContent>
       </Dialog>
-      <ScrollArea className="flex flex-col h-64">
+      <ScrollArea className="flex flex-col h-40 sm:h-64">
         {playlist.map((list) => (
           <div
             key={list.id}
-            className="p-2 rounded-lg  w-full hover:bg-secondary"
+            className="p-2 rounded-lg  w-full hover:bg-secondary flex "
           >
-            {list.data.name}
+            <p onClick={() => handleClick(list)} className="w-full">
+              {list.data.name}
+            </p>
+            <Trash2
+              size={18}
+              onClick={() =>
+                deletePlaylist(list.id, playlist, setPlaylist, emptyPlaylist)
+              }
+            />
           </div>
         ))}
       </ScrollArea>

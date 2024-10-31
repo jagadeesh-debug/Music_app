@@ -29,22 +29,20 @@ function MusicPlayer() {
   const { musicId } = useStore();
   useEffect(() => {
     async function fetchSong() {
-      console.log(musicId)
-      // console.log(musicId)
-      if(musicId){
-      try {
-        const res = await Api(`/api/songs/${musicId}`);
-        setSong(res.data.data[0]);
-        getImageColors(res.data.data[0].image[2].url).then(
-          ({ averageColor, dominantColor }) => {
-            setBgColor({ bg1: averageColor, bg2: dominantColor });
-          }
-        );
-        setIsPlaying(true);
-      } catch (error) {
-        console.log(error);
+      if (musicId) {
+        try {
+          const res = await Api(`/api/songs/${musicId}`);
+          setSong(res.data.data[0]);
+          getImageColors(res.data.data[0].image[2].url).then(
+            ({ averageColor, dominantColor }) => {
+              setBgColor({ bg1: averageColor, bg2: dominantColor });
+            }
+          );
+          setIsPlaying(true);
+        } catch (error) {
+          console.log(error);
+        }
       }
-    }
     }
     // async function songSuggestion() {
     //   const res = await Api(`/api/songs/${value}/suggestions`)
@@ -55,9 +53,11 @@ function MusicPlayer() {
     fetchSong();
   }, [musicId]);
 
-  useEffect(()=>{
-    if(duration*played==duration){setIsPlaying(false)}
-  },[played])
+  useEffect(() => {
+    if (duration * played == duration) {
+      setIsPlaying(false);
+    }
+  }, [played]);
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     setVolume(parseFloat(e.target.value));
@@ -66,7 +66,7 @@ function MusicPlayer() {
   const handleToggleMute = () => {
     return setMuted(!muted);
   };
-  const handleProgress = (state) => setPlayed(state.played) ;
+  const handleProgress = (state) => setPlayed(state.played);
   const handleDuration = (duration) => setDuration(duration);
   const handleSeekChange = (e) => {
     setPlayed(parseFloat(e.target.value));
@@ -85,11 +85,23 @@ function MusicPlayer() {
     muted || volume === 0 ? VolumeX : volume > 0.5 ? Volume2 : Volume1;
   return (
     <>
-      <Drawer >
+      <Drawer>
         <DrawerTrigger asChild>
-          <Button variant="outline" className={` absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s] ${isPlaying? "animate-spin": ""} rounded-full`}>{
-            <img className="rounded-full" src={song?.image[1].url} alt="Song" loading='lazy' />
-            }</Button>
+          <Button
+            variant="outline"
+            className={` absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s] ${
+              isPlaying ? "animate-spin" : ""
+            } rounded-full`}
+          >
+            {
+              <img
+                className="rounded-full"
+                src={song?.image[1].url}
+                alt="Song"
+                loading="lazy"
+              />
+            }
+          </Button>
         </DrawerTrigger>
         <DrawerContent className="h-[15dvh]">
           <div
@@ -104,7 +116,7 @@ function MusicPlayer() {
                   <img
                     src={song?.image[2].url}
                     alt={song?.name}
-                    loading='lazy'
+                    loading="lazy"
                     className="w-12 h-12 rounded-md shadow-lg"
                   />
                   <div>
