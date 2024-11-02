@@ -10,6 +10,7 @@ import { useStore } from "../../zustand/store";
 import { ScrollArea } from "../ui/scroll-area";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { deletePlaylist } from "../../Api";
+import { fetchFireStore } from "../../Api";
 export default function Playlist({ setPopover }) {
   const navigate = useNavigate();
   const user = getAuth(app)?.currentUser;
@@ -17,6 +18,7 @@ export default function Playlist({ setPopover }) {
   const input = useRef(null);
   const { playlist, setPlaylist, emptyPlaylist } = useStore();
   async function handleSubmit(e) {
+
     e.preventDefault();
     setIsDialog(false);
     const collectionRef = collection(db, "users", user?.uid, "playlists");
@@ -24,12 +26,9 @@ export default function Playlist({ setPopover }) {
       name: input.current.value,
       songs: arrayUnion(),
     });
-    setPlaylist({ id: null, data: { name: input.current.value } });
+    emptyPlaylist()
+    fetchFireStore(setPlaylist)
   }
-  // useEffect(() => {
-  //   emptyPlaylist()
-  //   fetchFireStore(setPlaylist);
-  // }, []);
   const handleClick = (list) => {
     const id = list?.id;
     const path = {

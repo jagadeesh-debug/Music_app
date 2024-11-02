@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import Api from "../Api";
-import { CloudLightning } from "lucide-react";
 export const useFetch = create((set) => ({
   songs: null,
   albums: null,
@@ -43,6 +42,7 @@ export const useFetch = create((set) => ({
 export const useStore = create((set) => ({
   playlist: [],
   musicId: null,
+  isPlaying:false,
   setPlaylist: (prope) =>
     set((state) => ({
       playlist: [...state.playlist, prope],
@@ -53,4 +53,5 @@ export const useStore = create((set) => ({
   setIsUser: (prop) => set({ isUser: prop }),
   dialogOpen: false,
   setDialogOpen: (prop) => set({ dialogOpen: prop }),
+  setIsPlaying:(prop)=> set({isPlaying:prop}),
 }));

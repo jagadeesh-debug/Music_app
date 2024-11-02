@@ -21,7 +21,7 @@ export default function InputBar() {
       <div className="max-w-3xl mx-auto flex justify-center items-center gap-2 sm:gap-3">
         <Input
           placeholder="Search for music..."
-          className="text-sm sm:text-base md:text-lg flex-grow"
+          className="text-sm sm:text-base md:text-lg p-4 flex-grow"
           required
           ref={inputRef}
           type="search"
@@ -30,7 +30,7 @@ export default function InputBar() {
           type="submit"
           className="p-1 sm:p-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
         >
-          <Search className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+          <Search className="w-5 h-5  md:w-6 md:h-6" />
         </button>
       </div>
     </form>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Label } from "../ui/label";
 import { Card, CardContent } from "../ui/card";
-import { PlayCircle, Play, Eye, EllipsisVertical } from "lucide-react";
+import { PlayCircle, Play, Eye, EllipsisVertical,Pause } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import { useNavigate, createSearchParams, useLocation } from "react-router-dom";
 import RandomArtists from "../Artist/artists";
@@ -20,7 +20,7 @@ import {
 export default function SearchComponent() {
   const { fetchSongs, songs, fetchAlbums, albums, Topresult, setTopresult } =
     useFetch();
-  const { setMusicId, playlist } = useStore();
+  const { setMusicId, playlist,musicId,isPlaying,setIsPlaying } = useStore();
   const url = useLocation();
   const search = url.search.split("=")[1].replace("+", " ");
   const navigate = useNavigate();
@@ -30,8 +30,12 @@ export default function SearchComponent() {
     fetchSongs(search, setMusicId);
   }, [url, search]);
   function handleSongClick(song) {
-    setMusicId(song.id);
-    setTopresult(song);
+    if(song.id!==musicId){
+      setMusicId(song.id);
+      setTopresult(song);
+    } else{
+      setIsPlaying(true)
+    }
   }
   function handleAlbumsClick(Id) {
     const path = {
@@ -53,9 +57,9 @@ export default function SearchComponent() {
     <ScrollArea className="h-[90vh] w-[dvw] flex">
       <div className="flex flex-col w-full">
         <div className="max-w-7xl mx-auto sm:p-6 flex-grow">
-          <div className="flex flex-col lg:flex-row gap-4  lg:gap-8">
+          <div className="flex flex-col items-center lg:flex-row gap-4  lg:gap-8">
             {songs && (
-              <div className="w-[90vw] sm:w-full lg:w-1/3">
+              <div className="w-[90vw] sm:w-full md:w-1/3 lg:w-1/3">
                 <h2 className="text-xl sm:text-2xl font-bold mb-4">
                   Current Song
                 </h2>
@@ -92,7 +96,7 @@ export default function SearchComponent() {
                   </Card>
 
                   {/* Play button - static on mobile/tablet, animated on desktop */}
-                  <div className="absolute bottom-4 right-4 lg:opacity-0 lg:translate-y-8 lg:scale-75 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:scale-100 transition-all duration-300 ease-out">
+                  <div className="absolute bottom-10 right-4 sm:bottom-4 lg:opacity-0 lg:translate-y-8 lg:scale-75 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:scale-100 transition-all duration-300 ease-out">
                     <button
                       onClick={() => {
                         setMusicId(Topresult?.id);
@@ -113,7 +117,7 @@ export default function SearchComponent() {
                     {songs.map((song, index) => (
                       <li
                         key={index}
-                        className="flex items-center justify-between p-2 sm:p-3 rounded-lg transition-all hover:bg-secondary hover:scale-[1.03] duration-200 "
+                        className={` ${song.id===musicId? "bg-secondary": "bg-background"} flex items-center justify-between p-2 sm:p-3 rounded-lg transition-all hover:bg-secondary hover:scale-[1.03] duration-200 `}
                       >
                         <div className="flex items-center space-x-2 sm:space-x-4">
                           <span className="w-4 sm:w-6 text-center text-sm sm:text-base">
@@ -143,12 +147,13 @@ export default function SearchComponent() {
                             {Math.floor(song.duration / 60)}:
                             {(song.duration % 60).toString().padStart(2, "0")}
                           </span>
-                          <button className="p-1 sm:p-2 rounded-full">
-                            <PlayCircle
+                          
+                          {isPlaying&&song.id===musicId ? <Pause className="w-4 h-4 sm:w-5 sm:h-5" onClick={()=>setIsPlaying(false)} /> : <PlayCircle
                               className="w-4 h-4 sm:w-5 sm:h-5"
                               onClick={() => handleSongClick(song)}
-                            />
-                          </button>
+                            />}
+
+                          
                           <Menubar>
                             <MenubarMenu>
                               <MenubarTrigger>

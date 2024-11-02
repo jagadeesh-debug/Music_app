@@ -18,7 +18,6 @@ import { Button } from "../ui/button";
 import { useStore } from "../../zustand/store";
 
 function MusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [muted, setMuted] = useState(false);
   const [played, setPlayed] = useState(0);
@@ -26,7 +25,7 @@ function MusicPlayer() {
   const [bgColor, setBgColor] = useState();
   const playerRef = useRef(null);
   const [song, setSong] = useState();
-  const { musicId } = useStore();
+  const { musicId,isPlaying,setIsPlaying } = useStore();
   useEffect(() => {
     async function fetchSong() {
       if (musicId) {

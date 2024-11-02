@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Play, Plus, MoreHorizontal, Clock } from 'lucide-react';
+import { Play, Plus, MoreHorizontal, Clock,Pause } from 'lucide-react';
 import { useLocation } from 'react-router-dom'
 import Api from '../../Api';
 import { useStore } from '../../zustand/store';
@@ -9,7 +9,7 @@ import {ScrollArea} from "../ui/scroll-area"
 export default function Album() {
   const [albumData,setAlbumData] = useState(null)
   const url = useLocation()
-  const {setMusicId} = useStore()
+  const {setMusicId,musicId,isPlaying,setIsPlaying} = useStore()
   const albumId = url?.search.split('=')[1];
   const [songs,setSongs]= useState(null)
   const  [bgColor, setBgColor]= useState()
@@ -27,51 +27,88 @@ export default function Album() {
     }
     fetching()
   },[albumId])
+  function handleSongClick(song) {
+    if(song.id!==musicId){
+      setMusicId(song.id);
+    } else{
+      setIsPlaying(true)
+    }
+  }
   return (
-    <ScrollArea className='h-[100dvh]'>
-    <div className=" text-white p-8 font-sans mb-[15dvh]" style={{background: `linear-gradient(${bgColor?.bg1} 0%,${bgColor?.bg2} 100%)` }}>
-    <div className="flex items-start space-x-6 mb-8">
-      <img src={albumData?.image[2].url} alt="Album cover" className="w-48 h-48 rounded-lg shadow-lg " loading='lazy'/>
-      <div>
-        <h1 className="text-2xl sm:text-7xl font-bold mb-4">{albumData?.name}</h1>
-        <p className="text-sm">{albumData?.description}</p>
+<ScrollArea className="h-[100dvh]">
+      <div 
+        className="text-white p-4 sm:p-8 font-sans mb-[15dvh]" 
+        style={{
+          background: `linear-gradient(${bgColor?.bg1} 0%, ${bgColor?.bg2} 100%)`
+        }}
+      >
+        {/* Album Header */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:space-x-6 mb-8">
+          <img 
+            src={albumData?.image[2].url} 
+            alt="Album cover" 
+            className="w-32 h-32 sm:w-48 sm:h-48 rounded-lg shadow-lg mb-4 sm:mb-0" 
+            loading="lazy"
+          />
+          <div>
+            <h1 className="text-2xl sm:text-7xl font-bold mb-2 sm:mb-4">{albumData?.name}</h1>
+            <p className="text-sm">{albumData?.description}</p>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="flex items-center space-x-4 mb-8">
+          <button className="bg-white text-black rounded-full p-3">
+            <Play size={24} />
+          </button>
+          <button className="border border-gray-400 rounded-full p-2">
+            <Plus size={20} />
+          </button>
+          <button className="text-gray-400">
+            <MoreHorizontal size={24} />
+          </button>
+        </div>
+
+        {/* Songs List Header */}
+        <div className="grid grid-cols-[auto_1fr_auto_auto] gap-4 px-4 mb-2 text-gray-400 text-sm">
+          <div>#</div>
+          <div>Title</div>
+          <div className="text-right">
+            <Clock size={16} />
+          </div>
+          <div></div>
+        </div>
+
+        {/* Songs List */}
+        <div className="space-y-1">
+          {songs?.map((song, index) => (
+            <div 
+              key={index}
+              className={`${song.id===musicId? "bg-secondary":"bg-background"} grid grid-cols-[auto_1fr_auto_auto] gap-4 px-4 py-3 hover:bg-secondary transition-all duration-300 rounded-lg items-center cursor-pointer`}>
+              <div className="text-sm">{index + 1}</div>
+              <div>
+                <p className="font-medium truncate">{song.name}</p>
+              </div>
+              <div>
+                {isPlaying && song.id === musicId ? (
+                  <Pause 
+                    className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer"
+                    onClick={() => setIsPlaying(false)} 
+                  />
+                ) : (
+                  <Play
+                    className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer"
+                    onClick={() => handleSongClick(song)}
+                  />
+                )}
+              </div>
+              <div className="text-right text-sm text-gray-400">
+                {Math.floor(song?.duration/60)}:{(song?.duration%60).toString().padStart(2, '0')}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-    
-    <div className="flex items-center space-x-4 mb-8">
-      <button  className="bg-white text-black rounded-full p-3">
-        <Play size={24} />
-      </button>
-      <button className="border border-gray-400 rounded-full p-2">
-        <Plus size={20} />
-      </button>
-      <button className="text-gray-400">
-        <MoreHorizontal size={24} />
-      </button>
-    </div>
-    
-    <table className="w-full ]">
-      <thead>
-        <tr className="border-b border-gray-700 text-gray-400 text-sm">
-          <th className="text-left pb-2">#</th>
-          <th className="text-left pb-2">Title</th>
-          <th className="text-right pb-2 float-end"><Clock size={16} /></th>
-        </tr>
-      </thead>
-      <tbody>
-        {songs?.map((song,index) => (
-          <tr onClick={()=>setMusicId(song.id)} key={index} className=" hover:bg-secondary transition-colors ">
-          
-            <td className="py-3">{index+1}</td>
-            <td>
-              <p className="font-medium">{song.name}</p>
-            </td>
-            <td className="text-right text-sm text-gray-400">{Math.floor(song?.duration/60)}:{(song?.duration%60).toString().padStart(2, '0')}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-  </ScrollArea>
+    </ScrollArea>
   )
 }

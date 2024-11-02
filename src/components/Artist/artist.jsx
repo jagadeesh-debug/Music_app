@@ -5,12 +5,12 @@ import { Card, CardContent } from "../ui/card";
 import { getImageColors } from "../color/ColorGenrator";
 import { ScrollArea } from "../ui/scroll-area";
 import { useStore } from "../../zustand/store";
-import { BadgePlus } from "lucide-react";
+import {  Play, Pause } from "lucide-react";
 function Artist() {
   const [data, setData] = useState();
   const [bgColor, setBgColor] = useState();
   let url = useLocation();
-  const { setMusicId } = useStore();
+  const { setMusicId, musicId, isPlaying, setIsPlaying } = useStore();
   const artistId = url.search.split("=")[1];
   useEffect(() => {
     const fetching = async () => {
@@ -28,6 +28,14 @@ function Artist() {
     };
     fetching();
   }, [artistId]);
+  function handleSongClick(song) {
+    if(song.id!==musicId){
+      setMusicId(song.id);
+      setTopresult(song);
+    } else{
+      setIsPlaying(true)
+    }
+  }
 
   if (!data) {
     return <h1 className=" text-3xl self-center">...Loading</h1>;
@@ -61,10 +69,8 @@ function Artist() {
           <ul className="space-y-2">
             {data.topSongs.map((song, index) => (
               <li
-                key={index}
-                onClick={() => setMusicId(song.id)}
-                className=" rounded-lg hover:bg-secondary hover:scale-105  transition-all duration-300"
-              >
+                key={index} 
+                className={` ${song.id===musicId? "bg-secondary" : 'bg-background'} rounded-lg hover:bg-secondary hover:scale-105  transition-all duration-300`}>
                 <div className="flex items-center justify-between p-3">
                   <div className="flex items-center space-x-4">
                     <p className="text-sm">{index + 1}.</p>
@@ -81,7 +87,19 @@ function Artist() {
                       {Math.floor(song.duration / 60)}:
                       {(song.duration % 60).toString().padStart(2, "0")}
                     </span>
-                    <BadgePlus />
+                    <div>
+                      {isPlaying && song.id === musicId ? (
+                        <Pause
+                          className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer"
+                          onClick={() => setIsPlaying(false)}
+                        />
+                      ) : (
+                        <Play
+                          className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer"
+                          onClick={() => handleSongClick(song)}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               </li>

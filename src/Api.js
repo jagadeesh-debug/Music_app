@@ -29,6 +29,7 @@ export const fetchFireStore = (setPlaylist) => {
 };
 
 export function pushInDb(playlistId, musicId) {
+  console.log("called")
   const auth = getAuth(app);
   onAuthStateChanged(auth, (user) => {
     const collectionRef = doc(db, "users", user?.uid, "playlists", playlistId);
