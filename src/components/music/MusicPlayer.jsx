@@ -25,7 +25,7 @@ function MusicPlayer() {
   const [bgColor, setBgColor] = useState();
   const playerRef = useRef(null);
   const [song, setSong] = useState();
-  const { musicId,isPlaying,setIsPlaying } = useStore();
+  const { musicId,isPlaying,setIsPlaying,setMusicId,songs } = useStore();
   useEffect(() => {
     async function fetchSong() {
       if (musicId) {
@@ -43,20 +43,9 @@ function MusicPlayer() {
         }
       }
     }
-    // async function songSuggestion() {
-    //   const res = await Api(`/api/songs/${value}/suggestions`)
-    //   console.log(res.data)
 
-    // }
-    // songSuggestion()
     fetchSong();
   }, [musicId]);
-
-  useEffect(() => {
-    if (duration * played == duration) {
-      setIsPlaying(false);
-    }
-  }, [played]);
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     setVolume(parseFloat(e.target.value));
@@ -65,7 +54,12 @@ function MusicPlayer() {
   const handleToggleMute = () => {
     return setMuted(!muted);
   };
-  const handleProgress = (state) => setPlayed(state.played);
+  const handleProgress = (state) =>{
+     setPlayed(state.played)
+     if (duration * state.played == duration) {
+      setIsPlaying(false);
+    }
+    };
   const handleDuration = (duration) => setDuration(duration);
   const handleSeekChange = (e) => {
     setPlayed(parseFloat(e.target.value));
@@ -73,6 +67,20 @@ function MusicPlayer() {
   const handleSeekMouseUp = (e) => {
     playerRef.current.seekTo(parseFloat(e.target.value));
   };
+
+  function handleNext (){
+    setMusicId(queue[Math.floor(Math.random() * 20) + 1]?.id)
+  }
+
+  function handlePrevios () {
+      queue.forEach(element => {
+        if(element.id===musicId){
+          console.log(element)
+        }
+      });
+  }
+  
+  
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -124,10 +132,10 @@ function MusicPlayer() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <button className="focus:outline-none">
+                  <button className="focus:outline-none" >
                     <Shuffle className="w-5 h-5" />
                   </button>
-                  <button className="focus:outline-none">
+                  <button className="focus:outline-none" onClick={handlePrevios}>
                     <SkipBack className="w-5 h-5" />
                   </button>
                   <button
@@ -140,7 +148,7 @@ function MusicPlayer() {
                       <Play className="w-6 h-6" />
                     )}
                   </button>
-                  <button className="focus:outline-none">
+                  <button className="focus:outline-none" onClick={handleNext}>
                     <SkipForward className="w-5 h-5" />
                   </button>
                   <button className="focus:outline-none">

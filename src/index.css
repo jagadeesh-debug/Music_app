@@ -37,6 +37,7 @@
     @apply border-border;
     scrollbar-width: thin;
   scrollbar-color: #888 #1e1e1e;
+  scroll-behavior: smooth;
   }
   body {
     @apply bg-background text-foreground;

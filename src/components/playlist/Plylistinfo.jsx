@@ -6,14 +6,15 @@ import { doc, getDoc } from "firebase/firestore";
 import { useLocation } from "react-router-dom";
 import { ScrollArea } from "../ui/scroll-area";
 import { Card, CardContent } from "../ui/card";
-import { getImageColors } from "../color/ColorGenrator";
-import { Play, Heart, Clock } from "lucide-react";
+import { useStore } from "../../zustand/store";
+import { Play, Heart, Clock, Pause } from "lucide-react";
 export default function Plylistinfo() {
   const url = useLocation();
   const playlistId = url?.search.split("=")[1];
   const user = getAuth(app).currentUser;
   const [playlistData, setPlaylistData] = useState([]);
   const [playlistName, setPlaylistName] = useState();
+  const { isPlaying, setIsPlaying, setMusicId, musicId } = useStore();
   let count = playlistData.slice(0, 3).length;
   useEffect(() => {
     setPlaylistData([]);
@@ -30,25 +31,39 @@ export default function Plylistinfo() {
     }
     getFireStore();
   }, [user]);
-  console.log(playlistData, playlistName);
+  function handleSongClick(song) {
+    if (song.id !== musicId) {
+      setMusicId(song.id);
+    } else {
+      setIsPlaying(true);
+    }
+  }
   return (
     <>
       <ScrollArea className="h-[100dvh]">
         <div className="container mx-auto p-4 space-y-6 mb-[15dvh]">
           <Card
             className="overflow-hidden bg-gradient-to-b"
-            // style={{
-            //   background: `linear-gradient(${bgColor.bg1} 0%, ${bgColor.bg2} 100%)`
-            // }}
           >
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row md:items-end gap-6">
                 <div className="w-64 h-64 border rounded-lg overflow-hidden ">
                   <div className={`flex flex-wrap w-full h-full`}>
                     {playlistData.slice(0, 3).map((item, i) => (
-                      <img key={i} src={item.image[2].url}
+                      <img
+                        key={i}
+                        src={item.image[2].url}
                         alt={`song ${i + 1}`}
-                        className={`object-cover ${count === 1 ? "w-full h-full" : ""}${count === 2 ? "w-1/2 h-full" : ""}${count === 3 ? (i === 0 ? "w-full h-1/2" : "w-1/2 h-1/2") : ""}${count === 4 ? "w-1/2 h-1/2" : ""}`}/>
+                        className={`object-cover ${
+                          count === 1 ? "w-full h-full" : ""
+                        }${count === 2 ? "w-1/2 h-full" : ""}${
+                          count === 3
+                            ? i === 0
+                              ? "w-full h-1/2"
+                              : "w-1/2 h-1/2"
+                            : ""
+                        }${count === 4 ? "w-1/2 h-1/2" : ""}`}
+                      />
                     ))}
                   </div>
                 </div>
@@ -83,7 +98,7 @@ export default function Plylistinfo() {
                 <li
                   key={index}
                   onClick={() => setMusicId(song.id)}
-                  className="rounded-lg hover:bg-secondary hover:scale-105 transition-all duration-300"
+                  className="rounded-lg hover:bg-secondary hover:scale-[1.02] transition-all duration-300"
                 >
                   <div className="flex items-center justify-between p-3">
                     <div className="flex items-center space-x-4">
@@ -102,9 +117,17 @@ export default function Plylistinfo() {
                       </div>
                     </div>
                     <div className="flex gap-4 items-center">
-                      <button className="opacity-0 group-hover:opacity-100 text-primary">
-                        <Heart size={16} />
-                      </button>
+                      {isPlaying && song.id === musicId ? (
+                        <Pause
+                          className="w-4 h-4 sm:w-5 sm:h-5"
+                          onClick={() => setIsPlaying(false)}
+                        />
+                      ) : (
+                        <Play
+                          className="w-4 h-4 sm:w-5 sm:h-5"
+                          onClick={() => handleSongClick(song)}
+                        />
+                      )}
                       <span className="text-sm text-gray-500">
                         {Math.floor(song.duration / 60)}:
                         {(song.duration % 60).toString().padStart(2, "0")}

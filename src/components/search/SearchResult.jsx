@@ -110,10 +110,10 @@ export default function SearchComponent() {
               </div>
             )}
             {songs && (
-              <div className="w-[95vw] sm:w-full lg:w-2/3 border rounded-xl p-4">
+              <div className="w-[95vw] sm:w-full lg:w-2/3 border rounded-xl p-2">
                 <h2 className="text-xl sm:text-2xl font-bold mb-4">Songs</h2>
-                <ScrollArea className="h-[40vh] sm:h-[50vh]">
-                  <ul className="space-y-2 pr-4">
+                <ScrollArea className="h-[40vh]   sm:h-[50vh]">
+                  <ul className="space-y-2 ">
                     {songs.map((song, index) => (
                       <li
                         key={index}
@@ -126,7 +126,7 @@ export default function SearchComponent() {
                           <img
                             src={
                               song.image
-                                ? song.image[2].url
+                                ? song.image[0].url
                                 : "/api/placeholder/40/40"
                             }
                             alt={song.name}
@@ -169,7 +169,7 @@ export default function SearchComponent() {
                                   <MenubarSubTrigger>
                                     Add to Playlist
                                   </MenubarSubTrigger>
-                                  <MenubarSubContent className="w-52 mr-2">
+                                  <MenubarSubContent className="w-52 mr-2 ">
                                     {playlist.map((list) => (
                                       <div
                                         key={list.id}

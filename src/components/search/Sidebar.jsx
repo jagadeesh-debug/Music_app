@@ -76,10 +76,10 @@ const Sidebar = () => {
           <ul className="flex-grow space-y-2 p-4">
             <li>
               <Button
-                onClick={() =>
+                onClick={() =>(
                   navigate(
                     `/search?searchTxt=${localStorage.getItem("search")}`
-                  )
+                  ),setIsOpen(false))
                 }
                 variant="ghost"
                 className="w-full justify-start text-lg py-6"
