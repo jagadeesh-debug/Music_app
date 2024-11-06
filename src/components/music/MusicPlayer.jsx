@@ -7,15 +7,14 @@ import {
   Volume1,
   Volume2,
   VolumeX,
-  Repeat,
   Shuffle,
 } from "lucide-react";
 import ReactPlayer from "react-player";
 import Api from "../../Api";
 import { getImageColors } from "../color/ColorGenrator";
-import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger,DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
-import { useStore } from "../../zustand/store";
+import { useStore, useFetch } from "../../zustand/store";
 
 function MusicPlayer() {
   const [volume, setVolume] = useState(0.8);
@@ -23,9 +22,11 @@ function MusicPlayer() {
   const [played, setPlayed] = useState(0);
   const [duration, setDuration] = useState(0);
   const [bgColor, setBgColor] = useState();
+  const [shuffle,setShuffle]=useState(false)
   const playerRef = useRef(null);
   const [song, setSong] = useState();
-  const { musicId,isPlaying,setIsPlaying,setMusicId,songs } = useStore();
+  const { songs } = useFetch();
+  const { musicId, isPlaying, setIsPlaying, setMusicId, setQueue, queue } = useStore();
   useEffect(() => {
     async function fetchSong() {
       if (musicId) {
@@ -43,9 +44,11 @@ function MusicPlayer() {
         }
       }
     }
-
     fetchSong();
   }, [musicId]);
+  useEffect(() => {
+    setQueue(songs);
+  }, [songs]);
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     setVolume(parseFloat(e.target.value));
@@ -54,33 +57,64 @@ function MusicPlayer() {
   const handleToggleMute = () => {
     return setMuted(!muted);
   };
-  const handleProgress = (state) =>{
-     setPlayed(state.played)
-     if (duration * state.played == duration) {
-      setIsPlaying(false);
+  const handleProgress = (state) => {
+    setPlayed(state.played);
+    if (duration * state.played == duration) {
+      queue.forEach((e,i)=>{
+        if(i===queue.length-1) return
+        if(shuffle) setMusicId(queue[Math.floor(Math.random() * queue.length)].id);
+        if(e.id===musicId){
+          setMusicId(queue[i+1].id)
+        }
+      })
     }
-    };
+  };
   const handleDuration = (duration) => setDuration(duration);
   const handleSeekChange = (e) => {
     setPlayed(parseFloat(e.target.value));
   };
   const handleSeekMouseUp = (e) => {
-    playerRef.current.seekTo(parseFloat(e.target.value));
+    let seekValue;
+  
+    // Handle touch events (for mobile)
+    if (e.type === 'touchend') {
+      const touch = e.changedTouches[0]; // Get the first touch point
+      const target = document.elementFromPoint(touch.clientX, touch.clientY); // Find the element at the touch position
+      if (target && target.value) {
+        seekValue = parseFloat(target.value); // Get the value from the slider element
+      }
+    } 
+    // Handle mouse events (for desktop)
+    else {
+      seekValue = parseFloat(e.target.value);
+    }
+  
+    if (seekValue !== undefined) {
+      playerRef.current.seekTo(seekValue);
+    }
   };
 
-  function handleNext (){
-    setMusicId(queue[Math.floor(Math.random() * 20) + 1]?.id)
+  function handleNext() {
+
+    queue.forEach((e,i)=>{
+      if(i===queue.length-1) return
+      if(shuffle) setMusicId(queue[Math.floor(Math.random() * queue.length)].id);
+      if(e.id===musicId){
+        setMusicId(queue[i+1].id)
+      }
+    })
   }
 
-  function handlePrevios () {
-      queue.forEach(element => {
-        if(element.id===musicId){
-          console.log(element)
-        }
-      });
+  function handlePrevios() {
+
+    queue.forEach((e,i)=>{
+      if(i===0) return
+      if(shuffle) setMusicId(queue[Math.floor(Math.random() * queue.length)].id);
+      if(e.id===musicId){
+        setMusicId(queue[i-1].id)
+      }
+    })
   }
-  
-  
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -111,6 +145,7 @@ function MusicPlayer() {
           </Button>
         </DrawerTrigger>
         <DrawerContent className="h-[15dvh]">
+          <DrawerTitle hidden></DrawerTitle>
           <div
             className={` h-full fixed bottom-0 left-0 right-0  text-white p-4`}
             style={{
@@ -132,10 +167,13 @@ function MusicPlayer() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <button className="focus:outline-none" >
-                    <Shuffle className="w-5 h-5" />
+                  <button onClick={()=>{shuffle==true? setShuffle(false):setShuffle(true)}} className={`${shuffle? "text-secondary": "text-white"}`}>
+                    <Shuffle className="w-5 h-5"  />
                   </button>
-                  <button className="focus:outline-none" onClick={handlePrevios}>
+                  <button
+                    className="focus:outline-none"
+                    onClick={handlePrevios}
+                  >
                     <SkipBack className="w-5 h-5" />
                   </button>
                   <button
@@ -151,9 +189,6 @@ function MusicPlayer() {
                   <button className="focus:outline-none" onClick={handleNext}>
                     <SkipForward className="w-5 h-5" />
                   </button>
-                  <button className="focus:outline-none">
-                    <Repeat className="w-5 h-5" />
-                  </button>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
@@ -167,6 +202,7 @@ function MusicPlayer() {
                     value={played}
                     onChange={handleSeekChange}
                     onMouseUp={handleSeekMouseUp}
+                    onTouchEnd={handleSeekMouseUp}
                     className="w-full h-1 bg-gray-600 rounded-full appearance-none cursor-pointer"
                     style={{
                       background: `linear-gradient(to right, #1db954 0%, #1db954 ${

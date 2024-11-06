@@ -40,7 +40,7 @@ function RandomArtists({ search }) {
                     </div>
                   )}
                 </div>
-                <h3 className="text-sm font-medium truncate text-center">
+                <h3 className="text-sm font-medium truncate w-32 text-center">
                   {artist?.name}
                 </h3>
               </div>

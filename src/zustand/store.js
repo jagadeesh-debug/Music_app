@@ -9,32 +9,31 @@ export const useFetch = create((set) => ({
   fetchSongs: async (search) => {
     try {
       const res = await Api(`/api/search/songs?query=${search}`);
-      
+
       if (res.data.data.results[0]) {
-        // Set the top result and the first song
         const topResult = res.data.data.results[0];
         set({
           Topresult: topResult,
-          songs: [topResult], 
+          songs: res.data.data.results.slice(0, 5),
         });
-  
+
         // Fetch suggestions for this song
         const suggestionsRes = await fetch(
           `https://jiosaavan-api-2-harsh-patel.vercel.app/api/songs/${topResult.id}/suggestions?limit=30`
         );
         const suggestionsData = await suggestionsRes.json();
-  
+
         set((state) => ({
           songs: [...state.songs, ...suggestionsData.data],
         }));
       } else {
-        set({ songs: false }); 
+        set({ songs: false });
       }
     } catch (error) {
-      console.error(error); 
+      console.error(error);
     }
   },
-  
+
   fetchAlbums: async (search) => {
     try {
       const res = await Api(`/api/search/albums?query=${search}`);
@@ -60,8 +59,8 @@ export const useFetch = create((set) => ({
 export const useStore = create((set) => ({
   playlist: [],
   musicId: null,
-  isPlaying:false,
-  queue:[],
+  isPlaying: false,
+  queue: [],
   setPlaylist: (prope) =>
     set((state) => ({
       playlist: [...state.playlist, prope],
@@ -72,6 +71,6 @@ export const useStore = create((set) => ({
   setIsUser: (prop) => set({ isUser: prop }),
   dialogOpen: false,
   setDialogOpen: (prop) => set({ dialogOpen: prop }),
-  setIsPlaying:(prop)=> set({isPlaying:prop}),
-  setQueue:(prop)=> set({queue:prop}),
+  setIsPlaying: (prop) => set({ isPlaying: prop }),
+  setQueue: (prop) => set({ queue: prop }),
 }));

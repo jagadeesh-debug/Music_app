@@ -1,26 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Label } from "../ui/label";
 import { Card, CardContent } from "../ui/card";
-import { PlayCircle, Play, Eye, EllipsisVertical,Pause } from "lucide-react";
+import { PlayCircle, Play, Eye, Pause } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import { useNavigate, createSearchParams, useLocation } from "react-router-dom";
 import RandomArtists from "../Artist/artists";
 import { useFetch, useStore } from "../../zustand/store";
-import { pushInDb } from "../../Api";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarMenu,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
-
+import Menu from "../Menu";
 export default function SearchComponent() {
   const { fetchSongs, songs, fetchAlbums, albums, Topresult, setTopresult } =
     useFetch();
-  const { setMusicId, playlist,musicId,isPlaying,setIsPlaying } = useStore();
+  const { setMusicId, musicId, isPlaying, setIsPlaying } = useStore();
   const url = useLocation();
   const search = url.search.split("=")[1].replace("+", " ");
   const navigate = useNavigate();
@@ -30,11 +20,11 @@ export default function SearchComponent() {
     fetchSongs(search, setMusicId);
   }, [url, search]);
   function handleSongClick(song) {
-    if(song.id!==musicId){
+    if (song.id !== musicId) {
       setMusicId(song.id);
       setTopresult(song);
-    } else{
-      setIsPlaying(true)
+    } else {
+      setIsPlaying(true);
     }
   }
   function handleAlbumsClick(Id) {
@@ -117,7 +107,9 @@ export default function SearchComponent() {
                     {songs.map((song, index) => (
                       <li
                         key={index}
-                        className={` ${song.id===musicId? "bg-secondary": "bg-background"} flex items-center justify-between p-2 sm:p-3 rounded-lg transition-all hover:bg-secondary hover:scale-[1.03] duration-200 `}
+                        className={` ${
+                          song.id === musicId ? "bg-secondary" : "bg-background"
+                        } flex items-center justify-between p-2 sm:p-3 rounded-lg transition-all hover:bg-secondary hover:scale-[1.03] duration-200 `}
                       >
                         <div className="flex items-center space-x-2 sm:space-x-4">
                           <span className="w-4 sm:w-6 text-center text-sm sm:text-base">
@@ -131,10 +123,10 @@ export default function SearchComponent() {
                             }
                             alt={song.name}
                             loading="lazy"
-                            className="w-8 h-8 sm:w-10 sm:h-10 rounded"
+                            className="w-8 h-8 sm:w-10 sm:h-10 rounded "
                           />
                           <div>
-                            <p className="font-medium text-sm sm:text-base">
+                            <p className="font-medium text-sm sm:text-base truncate w-24">
                               {song.name}
                             </p>
                             <p className="text-xs sm:text-sm">
@@ -147,45 +139,20 @@ export default function SearchComponent() {
                             {Math.floor(song.duration / 60)}:
                             {(song.duration % 60).toString().padStart(2, "0")}
                           </span>
-                          
-                          {isPlaying&&song.id===musicId ? <Pause className="w-4 h-4 sm:w-5 sm:h-5" onClick={()=>setIsPlaying(false)} /> : <PlayCircle
+
+                          {isPlaying && song.id === musicId ? (
+                            <Pause
+                              className="w-4 h-4 sm:w-5 sm:h-5"
+                              onClick={() => setIsPlaying(false)}
+                            />
+                          ) : (
+                            <PlayCircle
                               className="w-4 h-4 sm:w-5 sm:h-5"
                               onClick={() => handleSongClick(song)}
-                            />}
+                            />
+                          )}
 
-                          
-                          <Menubar>
-                            <MenubarMenu>
-                              <MenubarTrigger>
-                                <EllipsisVertical />
-                              </MenubarTrigger>
-                              <MenubarContent>
-                                <MenubarSub>
-                                  <MenubarSubTrigger>
-                                    Add to Queue
-                                  </MenubarSubTrigger>
-                                </MenubarSub>
-                                <MenubarSub>
-                                  <MenubarSubTrigger>
-                                    Add to Playlist
-                                  </MenubarSubTrigger>
-                                  <MenubarSubContent className="w-52 mr-2 ">
-                                    {playlist.map((list) => (
-                                      <div
-                                        key={list.id}
-                                        className="p-2 rounded-lg  w-full hover:bg-secondary"
-                                        onClick={() =>
-                                          pushInDb(list.id, song.id)
-                                        }
-                                      >
-                                        {list.data.name}
-                                      </div>
-                                    ))}
-                                  </MenubarSubContent>
-                                </MenubarSub>
-                              </MenubarContent>
-                            </MenubarMenu>
-                          </Menubar>
+                          <Menu song={song} />
                         </div>
                       </li>
                     ))}
@@ -211,7 +178,7 @@ export default function SearchComponent() {
                         loading="lazy"
                         className="w-24 h-24 sm:w-32 sm:h-32 object-cover hover:scale-105 transition-all rounded-lg mb-2"
                       />
-                      <Label className="text-center w-24 sm:w-32 text-xs sm:text-sm">
+                      <Label className="text-center w-32 sm:w-32 text-xs sm:text-sm truncate ">
                         {album.name}
                       </Label>
                     </div>

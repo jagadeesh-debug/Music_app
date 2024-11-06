@@ -11,7 +11,7 @@ import InputBar from "./search/InputBar";
 import { fetchFireStore } from "../Api";
 export default function home() {
   const navigate = useNavigate();
-  const { setIsUser, setPlaylist } = useStore();
+  const { setIsUser, setPlaylist, } = useStore();
   useEffect(() => {
     const auth = getAuth(app);
     const pathName = `/search?searchTxt=${
@@ -26,7 +26,6 @@ export default function home() {
 
     navigate(pathName);
   }, []);
-
   return (
     <>
       <div className="flex justify-evenly">

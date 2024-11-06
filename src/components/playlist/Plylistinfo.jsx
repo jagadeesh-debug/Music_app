@@ -14,7 +14,7 @@ export default function Plylistinfo() {
   const user = getAuth(app).currentUser;
   const [playlistData, setPlaylistData] = useState([]);
   const [playlistName, setPlaylistName] = useState();
-  const { isPlaying, setIsPlaying, setMusicId, musicId } = useStore();
+  const { isPlaying, setIsPlaying, setMusicId, musicId,setQueue } = useStore();
   let count = playlistData.slice(0, 3).length;
   useEffect(() => {
     setPlaylistData([]);
@@ -31,6 +31,9 @@ export default function Plylistinfo() {
     }
     getFireStore();
   }, [user]);
+  useEffect(()=>{
+    setQueue(playlistData)
+  },[playlistData])
   function handleSongClick(song) {
     if (song.id !== musicId) {
       setMusicId(song.id);
@@ -70,7 +73,7 @@ export default function Plylistinfo() {
 
                 <div className="flex-1">
                   <p className="text-sm text-gray-400 mb-2">PLAYLIST</p>
-                  <h1 className="text-3xl font-bold mb-4">{playlistName}</h1>
+                  <h1 className="text-3xl font-bold mb-4 truncate w-24">{playlistName}</h1>
                   <div className="flex items-center gap-4">
                     <button className="bg-primary text-primary-foreground rounded-full p-3 hover:opacity-90">
                       <Play size={24} fill="currentColor" />
