@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Label } from "../ui/label";
 import { Card, CardContent } from "../ui/card";
 import { PlayCircle, Play, Eye, Pause } from "lucide-react";
@@ -7,18 +7,21 @@ import { useNavigate, createSearchParams, useLocation } from "react-router-dom";
 import RandomArtists from "../Artist/artists";
 import { useFetch, useStore } from "../../zustand/store";
 import Menu from "../Menu";
+
 export default function SearchComponent() {
   const { fetchSongs, songs, fetchAlbums, albums, Topresult, setTopresult } =
     useFetch();
   const { setMusicId, musicId, isPlaying, setIsPlaying } = useStore();
   const url = useLocation();
-  const search = url.search.split("=")[1].replace("+", " ");
+  const search = url.search.split("=")[1];
   const navigate = useNavigate();
-  const [isMenuBar, setIsMenuBar] = useState(false);
+  // const [isMenuBar, setIsMenuBar] = useState(false);
+
   useEffect(() => {
     fetchAlbums(search);
     fetchSongs(search, setMusicId);
   }, [url, search]);
+
   function handleSongClick(song) {
     if (song.id !== musicId) {
       setMusicId(song.id);
@@ -27,6 +30,7 @@ export default function SearchComponent() {
       setIsPlaying(true);
     }
   }
+
   function handleAlbumsClick(Id) {
     const path = {
       pathname: "/album",
@@ -34,6 +38,7 @@ export default function SearchComponent() {
     };
     navigate(path);
   }
+
   const formatViews = (views) => {
     if (views == null) return;
     if (views >= 1000000) {
@@ -43,6 +48,7 @@ export default function SearchComponent() {
     }
     return views.toString();
   };
+
   return (
     <ScrollArea className="h-[90vh] w-[dvw] flex">
       <div className="flex flex-col w-full">
@@ -127,7 +133,7 @@ export default function SearchComponent() {
                           />
                           <div>
                             <p className="font-medium text-sm sm:text-base truncate w-24">
-                              {song.name}
+                              {song.name ? song.name : "Iss Duniya ka Papa"}
                             </p>
                             <p className="text-xs sm:text-sm">
                               {song.artists?.primary[0]?.name}

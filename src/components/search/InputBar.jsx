@@ -1,17 +1,33 @@
-import React from "react";
 import { useRef } from "react";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
-import { useSearchParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+
 export default function InputBar() {
   const inputRef = useRef();
-  const [searchQuery, setSearchQuery] = useSearchParams();
+  const [, setSearchQuery] = useSearchParams();
+  const CurrPath = useLocation();
+  const router = useNavigate();
+
   function handleSubmit(e) {
     e.preventDefault();
     localStorage.setItem("search", inputRef.current.value);
     const search = inputRef.current.value;
     setSearchQuery({ search });
     localStorage.setItem("search", search);
+
+    const path = {
+      pathname: "/search",
+      search: createSearchParams({
+        searchtxt: search,
+      }).toString(),
+    };
+    if (CurrPath.pathname !== "/search") router(path);
   }
   return (
     <form

@@ -1,13 +1,20 @@
 import { pushInDb } from "../Api";
-import React from "react";
 import { useStore } from "../zustand/store";
-import {EllipsisVertical,} from "lucide-react"
-import {Menubar,MenubarMenu,MenubarContent,MenubarTrigger,MenubarSub,MenubarSubTrigger,MenubarSubContent} from "../components/ui/menubar"
+import { EllipsisVertical } from "lucide-react";
+import {
+  Menubar,
+  MenubarMenu,
+  MenubarContent,
+  MenubarTrigger,
+  MenubarSub,
+  MenubarSubTrigger,
+  MenubarSubContent,
+} from "../components/ui/menubar";
 import { Toaster } from "../components/ui/sonner";
-import { toast } from "sonner"
+import { toast } from "sonner";
 
-export default function Menu({song}) {
-    const {playlist}=useStore()
+export default function Menu({ song }) {
+  const { playlist } = useStore();
   return (
     <>
       <Menubar>
@@ -26,7 +33,10 @@ export default function Menu({song}) {
                   <div
                     key={list.id}
                     className="p-2 rounded-lg  w-full hover:bg-secondary"
-                    onClick={() => (pushInDb(list.id, song.id),toast("song added in playlist"))}
+                    onClick={() => (
+                      pushInDb(list.id, song.id),
+                      toast("song added in playlist")
+                    )}
                   >
                     {list.data.name}
                   </div>
@@ -36,7 +46,7 @@ export default function Menu({song}) {
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
-      <Toaster/>
+      <Toaster />
     </>
   );
 }
