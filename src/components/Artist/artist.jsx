@@ -1,28 +1,29 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Api from "../../Api";
 import { Card, CardContent } from "../ui/card";
 import { getImageColors } from "../color/ColorGenrator";
 import { ScrollArea } from "../ui/scroll-area";
 import { useStore } from "../../zustand/store";
-import {  Play, Pause } from "lucide-react";
+import { Play, Pause } from "lucide-react";
 import Menu from "../Menu";
+
 function Artist() {
   const [data, setData] = useState();
   const [bgColor, setBgColor] = useState();
   let url = useLocation();
-  const { setMusicId, musicId, isPlaying, setIsPlaying,setQueue } = useStore();
+  const { setMusicId, musicId, isPlaying, setIsPlaying, setQueue } = useStore();
   const artistId = url.search.split("=")[1];
   useEffect(() => {
     const fetching = async () => {
       try {
         const res = await Api(`/api/artists/${artistId}`);
         setData(res.data.data);
-        setQueue(res.data.data.topSongs)
+        setQueue(res.data.data.topSongs);
         getImageColors(res.data.data.image[2].url).then(
           ({ averageColor, dominantColor }) => {
             setBgColor({ bg1: averageColor, bg2: dominantColor });
-          }
+          },
         );
       } catch (error) {
         console.error("Error fetching artist data:", error);
@@ -31,11 +32,10 @@ function Artist() {
     fetching();
   }, [artistId]);
   function handleSongClick(song) {
-    if(song.id!==musicId){
+    if (song.id !== musicId) {
       setMusicId(song.id);
-
-    } else{
-      setIsPlaying(true)
+    } else {
+      setIsPlaying(true);
     }
   }
 
@@ -71,8 +71,9 @@ function Artist() {
           <ul className="space-y-2">
             {data.topSongs.map((song, index) => (
               <li
-                key={index} 
-                className={` ${song.id===musicId? "bg-secondary" : 'bg-background'} rounded-lg hover:bg-secondary hover:scale-105  transition-all duration-300`}>
+                key={index}
+                className={` ${song.id === musicId ? "bg-secondary" : "bg-background"} rounded-lg hover:bg-secondary hover:scale-105  transition-all duration-300`}
+              >
                 <div className="flex items-center justify-between py-2 sm:p-3 sm:py-0">
                   <div className="flex items-center space-x-4">
                     <p className="text-sm">{index + 1}.</p>
@@ -82,7 +83,9 @@ function Artist() {
                       src={song.image[1].url}
                       alt={song.name}
                     />
-                    <span className="font-medium truncate w-24">{song.name}</span>
+                    <span className="font-medium truncate w-24">
+                      {song.name}
+                    </span>
                   </div>
                   <div className="flex gap-4">
                     <span className="text-sm text-gray-500">
@@ -102,7 +105,7 @@ function Artist() {
                         />
                       )}
                     </div>
-                    <Menu song={song}/>
+                    <Menu song={song} />
                   </div>
                 </div>
               </li>
