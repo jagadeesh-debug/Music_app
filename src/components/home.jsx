@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MusicPlayer from "./music/MusicPlayer";
 import { Outlet } from "react-router-dom";
@@ -9,13 +9,14 @@ import { app } from "../Auth/firebase";
 import { useStore } from "../zustand/store";
 import InputBar from "./search/InputBar";
 import { fetchFireStore } from "../Api";
-export default function home() {
+
+export default function Home() {
   const navigate = useNavigate();
-  const { setIsUser, setPlaylist, } = useStore();
+  const { setIsUser, setPlaylist } = useStore();
   useEffect(() => {
     const auth = getAuth(app);
-    const pathName = `/search?searchTxt=${
-      localStorage.getItem("search") || "parmish+verma"
+    const pathName = `/search?searchtxt=${
+      localStorage.getItem("search") || "khatta+flow"
     }`;
     onAuthStateChanged(auth, (user) => {
       if (user) {
