@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import  { useState, useRef, useEffect } from "react";
 import {
   Play,
   Pause,
@@ -46,9 +46,11 @@ function MusicPlayer() {
     }
     fetchSong();
   }, [musicId]);
+
   useEffect(() => {
     setQueue(songs);
   }, [songs]);
+
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     setVolume(parseFloat(e.target.value));
