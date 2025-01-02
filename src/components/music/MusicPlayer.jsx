@@ -17,7 +17,7 @@ import { Button } from "../ui/button";
 import { useStore, useFetch } from "../../zustand/store";
 
 function MusicPlayer() {
-  const [volume, setVolume] = useState(0.8);
+  const [volume, setVolume] = useState(localStorage.getItem("volume") || 0.5);
   const [muted, setMuted] = useState(false);
   const [played, setPlayed] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -27,6 +27,7 @@ function MusicPlayer() {
   const [song, setSong] = useState();
   const { songs } = useFetch();
   const { musicId, isPlaying, setIsPlaying, setMusicId, setQueue, queue } = useStore();
+
   useEffect(() => {
     async function fetchSong() {
       if (musicId) {
@@ -53,6 +54,7 @@ function MusicPlayer() {
 
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
+    localStorage.setItem("volume", e.target.value);
     setVolume(parseFloat(e.target.value));
     setMuted(false);
   };

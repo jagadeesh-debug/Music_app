@@ -24,7 +24,6 @@ export default function InputBar() {
     searchSong(searchInput);
   }
   const searchSong = (query) => {
-    localStorage.setItem("search", query);
 
     setSearchQuery({ query });
     localStorage.setItem("search", query);
