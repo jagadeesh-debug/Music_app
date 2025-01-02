@@ -65,3 +65,11 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+.float_debouncer {
+  position: absolute;
+  /* bottom: 0rem; */
+  left: 0rem;
+  /* top: 3rem; */
+  z-index: 1000;
+  
+}
