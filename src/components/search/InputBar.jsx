@@ -15,7 +15,7 @@ export default function InputBar() {
   const searchBarRef = useRef(null);
   const [, setSearchQuery] = useSearchParams();
   const [isSearchBarFocused, setIsSearchBarFocused] = useState(false);
-
+  const [loading,setLoading]= useState(false)
   const CurrPath = useLocation();
   const router = useNavigate();
 
@@ -62,6 +62,7 @@ export default function InputBar() {
 
   useEffect(() => {
     const fetchSearch = async () => {
+      setLoading(true)
       if (searchInput && isSearchBarFocused) {
         const res = await Api(`/api/search/songs?query=${searchInput}&limit=4`);
         const data = res.data.data.results.map((res) => {
@@ -72,6 +73,7 @@ export default function InputBar() {
         });
 
         setSuggestions(data);
+        setLoading(false)
       } else {
         setSuggestions([]);
       }
@@ -99,14 +101,17 @@ export default function InputBar() {
             ref={searchBarRef}
             type="search"
           />
-          {searchInput && isSearchBarFocused ? (
-            <div className="bg-background p-2 rounded-md float_debouncer lg:w-[36rem]">
+          {searchInput && isSearchBarFocused ? 
+            loading == true ? (<div className="bg-popover p-2 rounded-lg float_debouncer flex justify-center lg:w-[36rem] mt-2  shadow-lg">
+              <div class="w-10 h-10 border-4 border-t-foreground  rounded-full animate-spin"></div>
+            </div>) :  
+            (<div className="bg-popover p-2 rounded-lg float_debouncer lg:w-[36rem] mt-2  shadow-lg">
               {suggestions.length > 0 ? (
                 <ul className=" flex flex-col gap-2 pt-2">
                   {suggestions.map((suggestion) => (
                     <li
                       key={suggestion.id}
-                      className="p-2 hover:bg-foreground/20 rounded-md cursor-pointer bg-red-800 song-sugg"
+                      className="p-2 hover:bg-foreground/20 rounded-md cursor-pointer  song-sugg"
                       onClick={() => searchSong(suggestion.name)}
                     >
                       {suggestion.name}
@@ -116,8 +121,9 @@ export default function InputBar() {
               ) : (
                 <p>No suggestions found</p>
               )}
-            </div>
-          ) : null}
+            </div>)
+            
+              : null}
         </div>
         <button
           type="submit"
