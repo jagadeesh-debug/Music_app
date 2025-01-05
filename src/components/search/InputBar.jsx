@@ -15,7 +15,7 @@ export default function InputBar() {
   const searchBarRef = useRef(null);
   const [, setSearchQuery] = useSearchParams();
   const [isSearchBarFocused, setIsSearchBarFocused] = useState(false);
-  const [loading,setLoading]= useState(false)
+  const [loading, setLoading] = useState(false);
   const CurrPath = useLocation();
   const router = useNavigate();
 
@@ -24,7 +24,6 @@ export default function InputBar() {
     searchSong(searchInput);
   }
   const searchSong = (query) => {
-
     setSearchQuery({ query });
     localStorage.setItem("search", query);
 
@@ -36,9 +35,9 @@ export default function InputBar() {
     };
     if (CurrPath.pathname !== "/search") router(path);
     setIsSearchBarFocused(false);
-    if(query !== searchInput){
+    if (query !== searchInput) {
       setSearchInput(query);
-    } 
+    }
   };
 
   useEffect(() => {
@@ -52,7 +51,10 @@ export default function InputBar() {
     // searchBarRef.current.addEventListener("blur", () => {
     // });
     document.addEventListener("click", (e) => {
-      if (e.target.classList.contains("song-sugg") || e.target.classList.contains("inputBar")) {
+      if (
+        e.target.classList.contains("song-sugg") ||
+        e.target.classList.contains("inputBar")
+      ) {
         return;
       } else {
         setIsSearchBarFocused(false);
@@ -62,7 +64,7 @@ export default function InputBar() {
 
   useEffect(() => {
     const fetchSearch = async () => {
-      setLoading(true)
+      setLoading(true);
       if (searchInput && isSearchBarFocused) {
         const res = await Api(`/api/search/songs?query=${searchInput}&limit=4`);
         const data = res.data.data.results.map((res) => {
@@ -73,7 +75,7 @@ export default function InputBar() {
         });
 
         setSuggestions(data);
-        setLoading(false)
+        setLoading(false);
       } else {
         setSuggestions([]);
       }
@@ -83,7 +85,7 @@ export default function InputBar() {
     }, 400);
 
     return () => clearTimeout(timeout);
-  }, [searchInput]);
+  }, [searchInput,isSearchBarFocused]);
 
   return (
     <form
@@ -99,35 +101,45 @@ export default function InputBar() {
             onChange={(e) => setSearchInput(e.target.value)}
             value={searchInput}
             ref={searchBarRef}
-            type="search"
+            type="text"
           />
-          {searchInput && isSearchBarFocused ? 
-            loading == true ? (<div className="bg-popover p-2 rounded-lg float_debouncer flex justify-center lg:w-[36rem] mt-2  shadow-lg">
-              <div class="w-10 h-10 border-4 border-t-foreground  rounded-full animate-spin"></div>
-            </div>) :  
-            (<div className="bg-popover p-2 rounded-lg float_debouncer lg:w-[36rem] mt-2  shadow-lg">
-              {suggestions.length > 0 ? (
-                <ul className=" flex flex-col gap-2 pt-2">
-                  {suggestions.map((suggestion) => (
-                    <li
-                      key={suggestion.id}
-                      className="p-2 hover:bg-foreground/20 rounded-md cursor-pointer  song-sugg"
-                      onClick={() => searchSong(suggestion.name)}
-                    >
-                      {suggestion.name}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No suggestions found</p>
-              )}
-            </div>)
-            
-              : null}
+          {searchInput && (
+            <button
+              className="absolute right-4 text-gray-500 hover:text-gray-700"
+              onClick={() => setSearchInput("")}
+            >
+              &times;
+            </button>
+          )}
+          {searchInput && isSearchBarFocused ? (
+            loading == true ? (
+              <div className="bg-popover p-2 rounded-lg float_debouncer flex justify-center lg:w-[36rem] mt-2  shadow-lg w-full">
+                <div class="w-10 h-10 border-4 border-t-foreground  rounded-full animate-spin"></div>
+              </div>
+            ) : (
+              <div className="bg-popover p-2 rounded-lg float_debouncer lg:w-[36rem] mt-2 w-full shadow-lg">
+                {suggestions.length > 0 ? (
+                  <ul className=" flex flex-col gap-2 pt-2">
+                    {suggestions.map((suggestion) => (
+                      <li
+                        key={suggestion.id}
+                        className="p-2 hover:bg-foreground/20 rounded-md cursor-pointer  song-sugg"
+                        onClick={() => searchSong(suggestion.name)}
+                      >
+                        {suggestion.name}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No suggestions found</p>
+                )}
+              </div>
+            )
+          ) : null}
         </div>
         <button
           type="submit"
-          className="p-1 sm:p-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          className="p-1 sm:p-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors "
         >
           <Search className="w-5 h-5 md:w-6 md:h-6" />
         </button>

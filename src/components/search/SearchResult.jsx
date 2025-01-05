@@ -93,14 +93,17 @@ export default function SearchComponent() {
 
                   {/* Play button - static on mobile/tablet, animated on desktop */}
                   <div className="absolute bottom-10 right-4 sm:bottom-4 lg:opacity-0 lg:translate-y-8 lg:scale-75 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:scale-100 transition-all duration-300 ease-out">
-                    <button
-                      onClick={() => {
-                        setMusicId(Topresult?.id);
-                      }}
+                    {isPlaying ? (<button
+                      onClick={() => {setIsPlaying(!isPlaying)}}
+                      className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-colors duration-200">
+                      <Pause size={24} />
+                    </button>) : 
+                   (<button
+                      onClick={() => { musicId === null? setMusicId(Topresult?.id) : setIsPlaying(true); console.log(musicId) }}
                       className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-colors duration-200"
                     >
                       <Play size={24} />
-                    </button>
+                    </button>) }
                   </div>
                 </div>
               </div>
