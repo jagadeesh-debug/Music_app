@@ -103,14 +103,6 @@ export default function InputBar() {
             ref={searchBarRef}
             type="text"
           />
-          {searchInput && (
-            <button
-              className="absolute right-4 text-gray-500 hover:text-gray-700"
-              onClick={() => setSearchInput("")}
-            >
-              &times;
-            </button>
-          )}
           {searchInput && isSearchBarFocused ? (
             loading == true ? (
               <div className="bg-popover p-2 rounded-lg float_debouncer flex justify-center lg:w-[36rem] mt-2  shadow-lg w-full">

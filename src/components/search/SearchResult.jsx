@@ -99,7 +99,7 @@ export default function SearchComponent() {
                       <Pause size={24} />
                     </button>) : 
                    (<button
-                      onClick={() => { musicId === null? setMusicId(Topresult?.id) : setIsPlaying(true); console.log(musicId) }}
+                      onClick={() => { musicId === null? setMusicId(Topresult?.id) : setIsPlaying(true); }}
                       className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-colors duration-200"
                     >
                       <Play size={24} />

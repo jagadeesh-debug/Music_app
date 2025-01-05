@@ -55,7 +55,6 @@ function MusicPlayer() {
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
     localStorage.setItem("volume", Number(e.target.value));
-    console.log(localStorage.getItem("volume"));
     setVolume(parseFloat(e.target.value));
     setMuted(false);
   };
