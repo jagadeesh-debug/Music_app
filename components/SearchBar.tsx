@@ -1,59 +1,37 @@
+"use client"
 import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  createSearchParams,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import Api from "../../Api";
+import goBackendApi from "@/api/gobackend";
 
 export default function SearchBar() {
-  const [searchInput, setSearchInput] = useState("");
-const [suggestions, setSuggestions] = useState([]);
-  const searchBarRef = useRef(null);
-  const [, setSearchQuery] = useSearchParams();
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<Array<{ id: string; name: string }>>([]);
+  const searchBarRef = useRef<HTMLInputElement | null>(null);
   const [isSearchBarFocused, setIsSearchBarFocused] = useState(false);
   const [loading, setLoading] = useState(false);
-  const CurrPath = useLocation();
-  const router = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
     searchSong(searchInput);
   }
-  const searchSong = (query) => {
-    setSearchQuery({ query });
-    localStorage.setItem("search", query);
-
-    const path = {
-      pathname: "/search",
-      search: createSearchParams({
-        searchtxt: query,
-      }).toString(),
-    };
-    if (CurrPath.pathname !== "/search") router(path);
-    setIsSearchBarFocused(false);
-    if (query !== searchInput) {
-      setSearchInput(query);
-    }
-  };
+  const searchSong = (query: string) => {};
 
   useEffect(() => {
-    const search = localStorage.getItem("search");
-    if (search) {
-      setSearchInput(search);
+
+    if (searchBarRef.current) {
+      const callback = () => {
+        setIsSearchBarFocused(true);
+      };
+      searchBarRef.current.addEventListener("focus",callback);
     }
-    searchBarRef.current.addEventListener("focus", () => {
-      setIsSearchBarFocused(true);
-    });
-    // searchBarRef.current.addEventListener("blur", () => {
-    // });
-    document.addEventListener("click", (e) => {
+
+    document.addEventListener<"click">("click", (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
       if (
-        e.target.classList.contains("song-sugg") ||
-        e.target.classList.contains("inputBar")
+        target.classList.contains("song-sugg") ||
+        target.classList.contains("inputBar")
       ) {
         return;
       } else {
@@ -66,15 +44,11 @@ const [suggestions, setSuggestions] = useState([]);
     const fetchSearch = async () => {
       setLoading(true);
       if (searchInput && isSearchBarFocused) {
-        const res = await Api(`/api/search/songs?query=${searchInput}&limit=4`);
-        const data = res.data.data.results.map((res) => {
-          return {
-            id: res["id"],
-            name: res["name"],
-          };
-        });
-
+        const res = await goBackendApi(`searchsong?query=${searchInput}`);
+        const data = res.data.tracks as Array<{ id: string; name: string }>;
+     
         setSuggestions(data);
+        console.log(data);
         setLoading(false);
       } else {
         setSuggestions([]);
@@ -85,7 +59,7 @@ const [suggestions, setSuggestions] = useState([]);
     }, 400);
 
     return () => clearTimeout(timeout);
-  }, [searchInput,isSearchBarFocused]);
+  }, [searchInput, isSearchBarFocused]);
 
   return (
     <form
@@ -106,7 +80,7 @@ const [suggestions, setSuggestions] = useState([]);
           {searchInput && isSearchBarFocused ? (
             loading == true ? (
               <div className="bg-popover p-2 rounded-lg float_debouncer flex justify-center lg:w-[36rem] mt-2  shadow-lg w-full">
-                <div class="w-10 h-10 border-4 border-t-foreground  rounded-full animate-spin"></div>
+                <div className="w-10 h-10 border-4 border-t-foreground  rounded-full animate-spin"></div>
               </div>
             ) : (
               <div className="bg-popover p-2 rounded-lg float_debouncer lg:w-[36rem] mt-2 w-full shadow-lg">
