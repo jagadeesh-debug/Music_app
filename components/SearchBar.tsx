@@ -11,7 +11,7 @@ import Api from "../../Api";
 
 export default function SearchBar() {
   const [searchInput, setSearchInput] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+const [suggestions, setSuggestions] = useState([]);
   const searchBarRef = useRef(null);
   const [, setSearchQuery] = useSearchParams();
   const [isSearchBarFocused, setIsSearchBarFocused] = useState(false);
