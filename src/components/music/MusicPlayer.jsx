@@ -80,15 +80,15 @@ function MusicPlayer() {
   const handleSeekMouseUp = (e) => {
     let seekValue;
   
-    // Handle touch events (for mobile)
+    // Handle touch events for mobile
     if (e.type === 'touchend') {
-      const touch = e.changedTouches[0]; // Get the first touch point
-      const target = document.elementFromPoint(touch.clientX, touch.clientY); // Find the element at the touch position
+      const touch = e.changedTouches[0]; 
+      const target = document.elementFromPoint(touch.clientX, touch.clientY); 
       if (target && target.value) {
-        seekValue = parseFloat(target.value); // Get the value from the slider element
+        seekValue = parseFloat(target.value); 
       }
     } 
-    // Handle mouse events (for desktop)
+    // Handle mouse events for desktop
     else {
       seekValue = parseFloat(e.target.value);
     }
