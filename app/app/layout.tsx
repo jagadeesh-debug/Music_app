@@ -1,3 +1,4 @@
+import MusicPlayer from "@/components/MusicPlayer";
 import SearchBar from "@/components/SearchBar";
 
 export default function AppLayout({
@@ -12,6 +13,7 @@ export default function AppLayout({
         <SearchBar />
       </div>
         {children}
+        <MusicPlayer />
     </>
   );
 }

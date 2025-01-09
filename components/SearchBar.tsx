@@ -1,21 +1,26 @@
 "use client"
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import goBackendApi from "@/api/gobackend";
+import { useFetch } from "@/zustand/jiosavan";
 
 export default function SearchBar() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Array<{ id: string; name: string }>>([]);
+  const {fetchSongs} = useFetch()
   const searchBarRef = useRef<HTMLInputElement | null>(null);
   const [isSearchBarFocused, setIsSearchBarFocused] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     searchSong(searchInput);
   }
-  const searchSong = (query: string) => {};
+  const searchSong = (query: string) => {
+    fetchSongs(query);
+    console.log(query);
+  };
 
   useEffect(() => {
 
