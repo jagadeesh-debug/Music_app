@@ -70,7 +70,7 @@ export default function SearchComponent() {
                       />
                       <div className="space-y-2">
                         <h3 className="text-lg sm:text-xl font-semibold text-center mb-2">
-                          {Topresult?.name || "hello"}
+                          {Topresult?.name }
                         </h3>
 
                         {/* Label and View Count Row */}
@@ -99,7 +99,7 @@ export default function SearchComponent() {
                       <Pause size={24} />
                     </button>) : 
                    (<button
-                      onClick={() => { musicId === null? setMusicId(Topresult?.id) : setIsPlaying(true); }}
+                      onClick={() => { musicId !=Topresult?.id ? setMusicId(Topresult?.id) : setIsPlaying(true); }}
                       className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-colors duration-200"
                     >
                       <Play size={24} />

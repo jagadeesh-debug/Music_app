@@ -23,12 +23,14 @@ function MusicPlayer() {
   const [duration, setDuration] = useState(0);
   const [bgColor, setBgColor] = useState();
   const [shuffle,setShuffle]=useState(false)
+  const [musicPlayerDrawer,setMusicPlayerDrawer] = useState(false)
   const playerRef = useRef(null);
   const [song, setSong] = useState();
   const { songs } = useFetch();
   const { musicId, isPlaying, setIsPlaying, setMusicId, setQueue, queue } = useStore();
 
   useEffect(() => {
+
     async function fetchSong() {
       if (musicId) {
         try {
@@ -45,6 +47,7 @@ function MusicPlayer() {
         }
       }
     }
+   
     fetchSong();
   }, [musicId]);
 
@@ -52,7 +55,7 @@ function MusicPlayer() {
     setQueue(songs);
   }, [songs]);
 
-  const handlePlayPause = () => setIsPlaying(!isPlaying);
+  const handlePlayPause = () => setIsPlaying(!isPlaying); 
   const handleVolumeChange = (e) => {
     localStorage.setItem("volume", Number(e.target.value));
     setVolume(parseFloat(e.target.value));
@@ -130,12 +133,12 @@ function MusicPlayer() {
     muted || volume === 0 ? VolumeX : volume > 0.5 ? Volume2 : Volume1;
   return (
     <>
-      <Drawer>
-        <DrawerTrigger asChild>
+      <Drawer open={musicPlayerDrawer} onOpenChange={setMusicPlayerDrawer} >
+        <DrawerTrigger asChild >
           <Button
             variant="outline"
-            className={` absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s] ${
-              isPlaying ? "animate-spin" : ""
+            className={` absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s]  ${
+              isPlaying ? "animate-spin " : ""
             } rounded-full`}
           >
             {
