@@ -10,11 +10,22 @@ interface MusicPlayerState {
   addToQueue: (song: song) => void;
 }
 
-interface song {
+export interface song {
     Name: string;
     Id: string;
     Images: SpotifyImages[];
     // Views: number;
+}
+export interface playlist {
+    Name: string;
+    Id: string;
+    Tracks: SpotifyPlaylistTracks[]
+    Images: SpotifyImages[];
+}
+
+interface SpotifyPlaylistTracks {
+    Endpoint: string;
+    Total: number;
 }
 
 interface SpotifyImages {

@@ -15,7 +15,7 @@ import Api from "@/api/gobackend";
 import { getImageColors } from "@/utils/ColorGenrator";
 import { Drawer, DrawerContent, DrawerTrigger,DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { useStore, useFetch } from "@/zustand/golang"
+import { useMusicPlayerStore } from "@/zustand/golang"
 import Image from "next/image";
 
 const vol = localStorage.getItem("volume") === null ? "0.5" : localStorage.getItem("volume")
@@ -29,8 +29,7 @@ function MusicPlayer() {
   const [shuffle,setShuffle]=useState(false)
   const [song, setSong] = useState();
   const playerRef = useRef(null);
-  const { songs } = useFetch();
-  const { musicId, isPlaying, setIsPlaying, setMusicId, setQueue, queue } = useStore();
+  const { musicId, isPlaying, setIsPlaying, setMusicId, setQueue, queue } = useMusicPlayerStore();
   
   useEffect(() => {
     async function fetchSong() {
@@ -52,9 +51,9 @@ function MusicPlayer() {
     fetchSong();
   }, [musicId]);
 
-  useEffect(() => {
-    setQueue(songs);
-  }, [songs]);
+  // useEffect(() => {
+  //   setQueue(songs);
+  // }, [songs]);
 
   const handlePlayPause = () => setIsPlaying(!isPlaying);
   const handleVolumeChange = (e) => {
