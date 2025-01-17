@@ -5,8 +5,8 @@ import { playlist, song } from "@/zustand/golang";
 import { useEffect, useState } from "react";
 
 interface respSuggestion {
-  Tracks: song[]
-  Playlist: playlist[]
+  tracks: song[]
+  playlist: playlist[]
 }
 
 const fetchSuggestions = async ()=> {
@@ -17,13 +17,13 @@ const fetchSuggestions = async ()=> {
 
 const Page = () => {
   const [songs, setSongs] = useState<song[]>([])
-  const [playlists, setPlaylists] = useState<playlist[]>([])
+  // const [playlists, setPlaylists] = useState<playlist[]>([])
 
   useEffect(()=>{
     (async() =>{
       const data = await fetchSuggestions()
-      setSongs(data.Tracks)
-      setPlaylists(data.Playlist)
+      setSongs(data.tracks)      
+      // setPlaylists(data.Playlist)
       // console.log(playlists)
     })()
   },[])
@@ -37,7 +37,7 @@ const Page = () => {
 };
 
 const SongCard = ({data}: {data: song})=>{
-  console.log(data.Images)
+  console.log(data.images)
   return <div>Card</div>
 }
 

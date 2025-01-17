@@ -11,27 +11,27 @@ interface MusicPlayerState {
 }
 
 export interface song {
-    Name: string;
-    Id: string;
-    Images: SpotifyImages[];
+    name: string;
+    id: string;
+    images: SpotifyImages[];
     // Views: number;
 }
 export interface playlist {
-    Name: string;
-    Id: string;
-    Tracks: SpotifyPlaylistTracks[]
-    Images: SpotifyImages[];
+    name: string;
+    id: string;
+    tracks: SpotifyPlaylistTracks[]
+    images: SpotifyImages[];
 }
 
 interface SpotifyPlaylistTracks {
-    Endpoint: string;
-    Total: number;
+    endpoint: string;
+    total: number;
 }
 
 interface SpotifyImages {
-    Height: number;
-    Width: number;
-    URL: string;
+    height: number;
+    width: number;
+    url: string;
 }
 
 export const useMusicPlayerStore = create<MusicPlayerState>()((set) => ({
