@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -7,8 +7,10 @@ import { useFetch } from "@/zustand/jiosavan";
 
 export default function SearchBar() {
   const [searchInput, setSearchInput] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<Array<{ id: string; name: string }>>([]);
-  const {fetchSongs} = useFetch()
+  const [suggestions, setSuggestions] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+  const { fetchSongs } = useFetch();
   const searchBarRef = useRef<HTMLInputElement | null>(null);
   const [isSearchBarFocused, setIsSearchBarFocused] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,12 +25,11 @@ export default function SearchBar() {
   };
 
   useEffect(() => {
-
     if (searchBarRef.current) {
       const callback = () => {
         setIsSearchBarFocused(true);
       };
-      searchBarRef.current.addEventListener("focus",callback);
+      searchBarRef.current.addEventListener("focus", callback);
     }
 
     document.addEventListener<"click">("click", (e: MouseEvent) => {
@@ -51,7 +52,7 @@ export default function SearchBar() {
       if (searchInput && isSearchBarFocused) {
         const res = await goBackendApi(`searchsong?query=${searchInput}`);
         const data = res.data.tracks as Array<{ id: string; name: string }>;
-     
+
         setSuggestions(data);
         console.log(data);
         setLoading(false);

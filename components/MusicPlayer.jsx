@@ -143,6 +143,7 @@ function MusicPlayer() {
             } rounded-full`}
           >
             {
+              song?.image[1].url && 
               <Image
                 className="rounded-full"
                 src={song?.image[1].url}
@@ -163,12 +164,12 @@ function MusicPlayer() {
             <div className="max-w-screen-lg mx-auto ">
               <div className="flex items-center justify-between ">
                 <div className="flex items-center space-x-4">
-                  <Image
+                {song?.image[2].url && <Image
                     src={song?.image[2].url}
                     alt={song?.name}
                     loading="lazy"
                     className="w-12 h-12 rounded-md shadow-lg"
-                  />
+                  />}                  
                   <div>
                     <h3 className="text-sm font-semibold">{song?.name}</h3>
                     <p className="text-xs text-gray-400">{song?.artist}</p>

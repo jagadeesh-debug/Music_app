@@ -31,7 +31,7 @@ const Page = () => {
   return <div>
     <h1>Songs</h1>
     <div>
-      {songs?.map((song: song)=> <SongCard key={song.Id} data={song}/>)}
+      {songs?.map((song: song)=> <SongCard key={song.id} data={song}/>)}
     </div>
     </div>
 };
