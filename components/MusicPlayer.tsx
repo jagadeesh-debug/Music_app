@@ -1,5 +1,5 @@
-"use client"
-import  { useState, useRef, useEffect } from "react";
+"use client";
+import { useState, useRef, useEffect } from "react";
 import {
   Play,
   Pause,
@@ -11,33 +11,52 @@ import {
   Shuffle,
 } from "lucide-react";
 import ReactPlayer from "react-player";
-import Api from "@/api/gobackend";
+import Api from "@/api/jiosavan";
 import { getImageColors } from "@/utils/ColorGenrator";
-import { Drawer, DrawerContent, DrawerTrigger,DrawerTitle } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { useMusicPlayerStore } from "@/zustand/golang"
+import { SpotifyImages, useMusicPlayerStore } from "@/zustand/golang";
 import Image from "next/image";
+import { OnProgressProps } from "react-player/base";
 
-const vol = localStorage.getItem("volume") === null ? "0.5" : localStorage.getItem("volume")
+export interface song {
+  name: string;
+  id: string;
+  images: SpotifyImages[];
+  source: "jiosavan" | "yt";
+  downloadUrl: string;
+  artist: string[]
+}
+
+const vol = (
+  localStorage.getItem("volume") === null ? 0.4 : localStorage.getItem("volume")
+) as number;
 
 function MusicPlayer() {
-  const [volume, setVolume] = useState(vol);
+  const [volume, setVolume] = useState<number>(vol);
   const [muted, setMuted] = useState(false);
   const [played, setPlayed] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [bgColor, setBgColor] = useState();
-  const [shuffle,setShuffle]=useState(false)
-  const [song, setSong] = useState();
-  const playerRef = useRef(null);
-  const { musicId, isPlaying, setIsPlaying, setMusicId, setQueue, queue } = useMusicPlayerStore();
-  
+  const [bgColor, setBgColor] = useState<{bg1: string,bg2: string}>();
+  const [shuffle, setShuffle] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [song, setSong] = useState<song>();
+  const playerRef = useRef<ReactPlayer>(null);
+  const { musicID, setMusicID, setIsPlaying, queue, setMusicName } =
+    useMusicPlayerStore();
+
   useEffect(() => {
     async function fetchSong() {
-      if (musicId) {
+      if (musicID) {
         try {
-          const res = await Api(`/api/songs/${musicId}`);
+          const res = await Api(`/api/songs/${musicID}`);
           setSong(res.data.data[0]);
-          getImageColors(res.data.data[0].image[2].url).then(
+          getImageColors(res.data.data.results[0].image[2].url).then(
             ({ averageColor, dominantColor }) => {
               setBgColor({ bg1: averageColor, bg2: dominantColor });
             }
@@ -49,14 +68,27 @@ function MusicPlayer() {
       }
     }
     fetchSong();
-  }, [musicId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [musicID]);
 
   // useEffect(() => {
   //   setQueue(songs);
   // }, [songs]);
 
-  const handlePlayPause = () => setIsPlaying(!isPlaying);
-  const handleVolumeChange = (e) => {
+  const handleOnMusicStart = () => {
+    setIsPlaying(true);
+    setIsMusicPlaying(true);
+  };
+  const handleOnMusicStop = () => {
+    setIsMusicPlaying(false);
+    setIsPlaying(false);
+  };
+  const handlePlayBtnIcon = ()=> {
+    setIsMusicPlaying((prev)=> !prev)
+    setIsPlaying(!isMusicPlaying)
+  }
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem("volume", String(Number(e.target.value)));
     setVolume(parseFloat(e.target.value));
     setMuted(false);
@@ -64,67 +96,75 @@ function MusicPlayer() {
   const handleToggleMute = () => {
     return setMuted(!muted);
   };
-  const handleProgress = (state) => {
+  const handleProgress = (state: OnProgressProps) => {
     setPlayed(state.played);
     if (duration * state.played == duration) {
-      console.log(queue)
-      queue.forEach((e,i)=>{
-        if(i===queue.length-1) return
-        if(shuffle) setMusicId(queue[Math.floor(Math.random() * queue.length)].id);
-        if(e.id===musicId){
-          setMusicId(queue[i+1].id)
+      console.log(queue);
+      queue.forEach((e, i) => {
+        if (i === queue.length - 1) return;
+        if (shuffle)
+          setMusicName(queue[Math.floor(Math.random() * queue.length)].name);
+        if (e.id === musicID) {
+          setMusicID(queue[i + 1].id);
         }
-      })
+      });
     }
   };
-  const handleDuration = (duration) => setDuration(duration);
-  const handleSeekChange = (e) => {
-    setPlayed(parseFloat(e.target.value));
-  };
-  const handleSeekMouseUp = (e) => {
+  const handleDuration = (duration: number) => setDuration(duration);
+  const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPlayed(parseFloat(e.target.value));
+    };
+  const handleSeekMouseUp = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>
+  ) => {
     let seekValue;
-  
+
     // Handle touch events (for mobile)
-    if (e.type === 'touchend') {
+    if ("changedTouches" in e) {
       const touch = e.changedTouches[0]; // Get the first touch point
-      const target = document.elementFromPoint(touch.clientX, touch.clientY); // Find the element at the touch position
+      const target = document.elementFromPoint(
+        touch.clientX,
+        touch.clientY
+      ) as HTMLInputElement | null; // Find the element at the touch position
       if (target && target.value) {
         seekValue = parseFloat(target.value); // Get the value from the slider element
       }
-    } 
+    }
     // Handle mouse events (for desktop)
     else {
-      seekValue = parseFloat(e.target.value);
+      seekValue = parseFloat((e.target as HTMLInputElement).value);
     }
-  
+
     if (seekValue !== undefined) {
-      playerRef.current.seekTo(seekValue);
+      if (playerRef.current) {
+        playerRef.current.seekTo(seekValue);
+      }
     }
   };
 
   function handleNext() {
-
-    queue.forEach((e,i)=>{
-      if(i===queue.length-1) return
-      if(shuffle) setMusicId(queue[Math.floor(Math.random() * queue.length)].id);
-      if(e.id===musicId){
-        setMusicId(queue[i+1].id)
+    queue.forEach((e, i) => {
+      if (i === queue.length - 1) return;
+      if (shuffle)
+        setMusicID(queue[Math.floor(Math.random() * queue.length)].id);
+      if (e.id === musicID) {
+        setMusicID(queue[i + 1].id);
       }
-    })
+    });
   }
 
   function handlePrevios() {
-
-    queue.forEach((e,i)=>{
-      if(i===0) return
-      if(shuffle) setMusicId(queue[Math.floor(Math.random() * queue.length)].id);
-      if(e.id===musicId){
-        setMusicId(queue[i-1].id)
+    queue.forEach((e, i) => {
+      if (i === 0) return;
+      if (shuffle)
+        setMusicID(queue[Math.floor(Math.random() * queue.length)].id);
+      if (e.id === musicID) {
+        setMusicID(queue[i - 1].id);
       }
-    })
+    });
   }
 
-  const formatTime = (time) => {
+  const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
@@ -138,19 +178,22 @@ function MusicPlayer() {
         <DrawerTrigger asChild>
           <Button
             variant="outline"
-            className={` absolute right-6 bottom-6 p-0 h-16 w-16 [animation-duration:5s] ${
-              isPlaying ? "animate-spin" : ""
+            className={` absolute right-6 bottom-6 p-0 [animation-duration:5s] ${
+              isMusicPlaying ? "animate-spin" : ""
             } rounded-full`}
           >
-            {
-              song?.image[1].url && 
+            {song?.images[1].url && (
               <Image
                 className="rounded-full"
-                src={song?.image[1].url}
+                src={song?.images[1].url}
+                // width={song.image[1].width}
+                width={64}
+                // height={song.image[1].height}
+                height={64}
                 alt="Song"
                 loading="lazy"
               />
-            }
+            )}
           </Button>
         </DrawerTrigger>
         <DrawerContent className="h-[15dvh]">
@@ -164,20 +207,31 @@ function MusicPlayer() {
             <div className="max-w-screen-lg mx-auto ">
               <div className="flex items-center justify-between ">
                 <div className="flex items-center space-x-4">
-                {song?.image[2].url && <Image
-                    src={song?.image[2].url}
-                    alt={song?.name}
-                    loading="lazy"
-                    className="w-12 h-12 rounded-md shadow-lg"
-                  />}                  
+                  {song?.images[2].url && (
+                    <Image
+                      src={song?.images[2].url}
+                      alt={song?.name}
+                      // width={song.image[2].width}
+                      width={48}
+                      // height={song.image[2].height}
+                      height={48}
+                      loading="lazy"
+                      className="rounded-md shadow-lg"
+                    />
+                  )}
                   <div>
                     <h3 className="text-sm font-semibold">{song?.name}</h3>
                     <p className="text-xs text-gray-400">{song?.artist}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <button onClick={()=>{shuffle==true? setShuffle(false):setShuffle(true)}} className={`${shuffle? "text-secondary": "text-white"}`}>
-                    <Shuffle className="w-5 h-5"  />
+                  <button
+                    onClick={() =>
+                      shuffle == true ? setShuffle(false) : setShuffle(true)
+                    }
+                    className={`${shuffle ? "text-secondary" : "text-white"}`}
+                  >
+                    <Shuffle className="w-5 h-5" />
                   </button>
                   <button
                     className="focus:outline-none"
@@ -186,10 +240,10 @@ function MusicPlayer() {
                     <SkipBack className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={handlePlayPause}
+                    onClick={handlePlayBtnIcon}
                     className="focus:outline-none bg-white text-black rounded-full p-2"
                   >
-                    {isPlaying ? (
+                    {isMusicPlaying ? (
                       <Pause className="w-6 h-6" />
                     ) : (
                       <Play className="w-6 h-6" />
@@ -250,11 +304,14 @@ function MusicPlayer() {
       </Drawer>
       <ReactPlayer
         ref={playerRef}
-        url={song?.downloadUrl[4].url}
-        playing={isPlaying}
+        url={song?.downloadUrl}
+        // url={"https://delta.123tokyo.xyz/get.php/4/0f/jniYsYN9xe4.mp3?cid=MmEwMTo0Zjg6YzAxMjozMmVlOjoxfE5BfERF&h=24cCxb2MlEou8ZVlwZ9smQ&s=1737198021&n=HIRAKO%20SHINJI%20x%20TURU%20R9%20%28Ultra%20Slowed%20%26%20BassBoosted%29&uT=R&uN=Y29kZWJ1c3RlcnM%3D"}
+        playing={isMusicPlaying}
         volume={muted ? 0 : volume}
         onProgress={handleProgress}
         onDuration={handleDuration}
+        onStart={handleOnMusicStart}
+        onPause={handleOnMusicStop}
         width="0"
         height="0"
       />

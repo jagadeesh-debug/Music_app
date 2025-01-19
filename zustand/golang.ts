@@ -8,14 +8,18 @@ interface MusicPlayerState {
   setIsPlaying: (isPlaying: boolean) => void;
   queue: song[];
   addToQueue: (song: song) => void;
+  musicName: string
+  setMusicName: (name: string) => void;
 }
 
 export interface song {
     name: string;
     id: string;
     images: SpotifyImages[];
-    // Views: number;
+    source: "jiosavan" | "yt";
+    downloadUrl: string
 }
+
 export interface playlist {
     name: string;
     id: string;
@@ -28,7 +32,7 @@ interface SpotifyPlaylistTracks {
     total: number;
 }
 
-interface SpotifyImages {
+export interface SpotifyImages {
     height: number;
     width: number;
     url: string;
@@ -41,6 +45,8 @@ export const useMusicPlayerStore = create<MusicPlayerState>()((set) => ({
     setIsPlaying: (isPlaying) => set({ isPlaying }),
     queue: [],
     addToQueue: (song) => set((state) => ({ queue: [...state.queue, song] })),
+    musicName: "",
+    setMusicName: (name) => set({ musicName: name }),
 }));
 
 // interface FetchState {
