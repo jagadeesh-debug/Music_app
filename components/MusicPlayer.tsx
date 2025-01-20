@@ -11,7 +11,6 @@ import {
   Shuffle,
 } from "lucide-react";
 import ReactPlayer from "react-player";
-import Api from "@/api/jiosavan";
 import { getImageColors } from "@/utils/ColorGenrator";
 import {
   Drawer,
@@ -20,105 +19,98 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { SpotifyImages, useMusicPlayerStore } from "@/zustand/golang";
+import {
+  songMusicPlayerInterface,
+  useMusicPlayerStore,
+} from "@/zustand/golang";
 import Image from "next/image";
 import { OnProgressProps } from "react-player/base";
 
-export interface song {
-  name: string;
-  id: string;
-  images: SpotifyImages[];
-  source: "jiosavan" | "yt";
-  downloadUrl: string;
-  artist: string[]
+let vol = 0
+if (typeof window !== 'undefined') {
+  vol = (
+    localStorage.getItem("volume") === null ? 0.4 : localStorage.getItem("volume")
+  ) as number;
 }
-
-const vol = (
-  localStorage.getItem("volume") === null ? 0.4 : localStorage.getItem("volume")
-) as number;
 
 function MusicPlayer() {
   const [volume, setVolume] = useState<number>(vol);
   const [muted, setMuted] = useState(false);
   const [played, setPlayed] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [bgColor, setBgColor] = useState<{bg1: string,bg2: string}>();
+  const [bgColor, setBgColor] = useState<{ bg1: string; bg2: string }>();
   const [shuffle, setShuffle] = useState(false);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [song, setSong] = useState<song>();
+  const [song, setSong] = useState<songMusicPlayerInterface>();
   const playerRef = useRef<ReactPlayer>(null);
-  const { musicID, setMusicID, setIsPlaying, queue, setMusicName } =
+  const { musicID, songData, setSongData, setIsPlaying, isPlaying, queue } =
     useMusicPlayerStore();
 
   useEffect(() => {
-    async function fetchSong() {
-      if (musicID) {
-        try {
-          const res = await Api(`/api/songs/${musicID}`);
-          setSong(res.data.data[0]);
-          getImageColors(res.data.data.results[0].image[2].url).then(
-            ({ averageColor, dominantColor }) => {
-              setBgColor({ bg1: averageColor, bg2: dominantColor });
-            }
-          );
-          setIsPlaying(true);
-        } catch (error) {
-          console.log(error);
+    if (songData.id !== "") {
+      console.log(songData)
+      setSong(songData);
+      getImageColors(songData?.images[2]?.url).then(
+        ({ averageColor, dominantColor }) => {
+          setBgColor({ bg1: averageColor, bg2: dominantColor });
         }
-      }
+      );
+      setIsPlaying(true);
     }
-    fetchSong();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [musicID]);
 
-  // useEffect(() => {
-  //   setQueue(songs);
-  // }, [songs]);
+    return () => {
+      setIsPlaying(false);
+      setPlayed(0);
+      setDuration(0);
+      setSong(undefined);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [songData]);
 
   const handleOnMusicStart = () => {
+    console.log("Playing");
     setIsPlaying(true);
-    setIsMusicPlaying(true);
   };
   const handleOnMusicStop = () => {
-    setIsMusicPlaying(false);
+    console.log("Stopped!");
     setIsPlaying(false);
   };
-  const handlePlayBtnIcon = ()=> {
-    setIsMusicPlaying((prev)=> !prev)
-    setIsPlaying(!isMusicPlaying)
-  }
+  const handlePlayBtnIcon = () => {
+    setIsPlaying(!isPlaying);
+  };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     localStorage.setItem("volume", String(Number(e.target.value)));
     setVolume(parseFloat(e.target.value));
     setMuted(false);
   };
+
   const handleToggleMute = () => {
-    return setMuted(!muted);
+    return setMuted((prev) => !prev);
   };
+
   const handleProgress = (state: OnProgressProps) => {
     setPlayed(state.played);
     if (duration * state.played == duration) {
-      console.log(queue);
       queue.forEach((e, i) => {
         if (i === queue.length - 1) return;
         if (shuffle)
-          setMusicName(queue[Math.floor(Math.random() * queue.length)].name);
+          setSongData(queue[Math.floor(Math.random() * queue.length)]);
         if (e.id === musicID) {
-          setMusicID(queue[i + 1].id);
+          setSongData(queue[i + 1]);
         }
       });
     }
   };
   const handleDuration = (duration: number) => setDuration(duration);
+
   const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPlayed(parseFloat(e.target.value));
-    };
+    setPlayed(parseFloat(e.target.value));
+  };
+
   const handleSeekMouseUp = (
     e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>
   ) => {
     let seekValue;
-
     // Handle touch events (for mobile)
     if ("changedTouches" in e) {
       const touch = e.changedTouches[0]; // Get the first touch point
@@ -145,10 +137,9 @@ function MusicPlayer() {
   function handleNext() {
     queue.forEach((e, i) => {
       if (i === queue.length - 1) return;
-      if (shuffle)
-        setMusicID(queue[Math.floor(Math.random() * queue.length)].id);
+      if (shuffle) setSongData(queue[Math.floor(Math.random() * queue.length)]);
       if (e.id === musicID) {
-        setMusicID(queue[i + 1].id);
+        setSongData(queue[i + 1]);
       }
     });
   }
@@ -156,10 +147,9 @@ function MusicPlayer() {
   function handlePrevios() {
     queue.forEach((e, i) => {
       if (i === 0) return;
-      if (shuffle)
-        setMusicID(queue[Math.floor(Math.random() * queue.length)].id);
+      if (shuffle) setSongData(queue[Math.floor(Math.random() * queue.length)]);
       if (e.id === musicID) {
-        setMusicID(queue[i - 1].id);
+        setSongData(queue[i - 1]);
       }
     });
   }
@@ -172,6 +162,11 @@ function MusicPlayer() {
 
   const VolumeIcon =
     muted || volume === 0 ? VolumeX : volume > 0.5 ? Volume2 : Volume1;
+
+  if(song?.id === ""){
+    return
+  }
+  else
   return (
     <>
       <Drawer>
@@ -179,10 +174,10 @@ function MusicPlayer() {
           <Button
             variant="outline"
             className={` absolute right-6 bottom-6 p-0 [animation-duration:5s] ${
-              isMusicPlaying ? "animate-spin" : ""
+              isPlaying ? "animate-spin" : ""
             } rounded-full`}
           >
-            {song?.images[1].url && (
+            {song?.images[1]?.url && (
               <Image
                 className="rounded-full"
                 src={song?.images[1].url}
@@ -207,7 +202,7 @@ function MusicPlayer() {
             <div className="max-w-screen-lg mx-auto ">
               <div className="flex items-center justify-between ">
                 <div className="flex items-center space-x-4">
-                  {song?.images[2].url && (
+                  {song?.images[2]?.url && (
                     <Image
                       src={song?.images[2].url}
                       alt={song?.name}
@@ -221,7 +216,7 @@ function MusicPlayer() {
                   )}
                   <div>
                     <h3 className="text-sm font-semibold">{song?.name}</h3>
-                    <p className="text-xs text-gray-400">{song?.artist}</p>
+                    <p className="text-xs text-gray-100">{song?.artist?.toLocaleString()}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -243,7 +238,7 @@ function MusicPlayer() {
                     onClick={handlePlayBtnIcon}
                     className="focus:outline-none bg-white text-black rounded-full p-2"
                   >
-                    {isMusicPlaying ? (
+                    {isPlaying ? (
                       <Pause className="w-6 h-6" />
                     ) : (
                       <Play className="w-6 h-6" />
@@ -302,19 +297,22 @@ function MusicPlayer() {
           </div>
         </DrawerContent>
       </Drawer>
-      <ReactPlayer
-        ref={playerRef}
-        url={song?.downloadUrl}
-        // url={"https://delta.123tokyo.xyz/get.php/4/0f/jniYsYN9xe4.mp3?cid=MmEwMTo0Zjg6YzAxMjozMmVlOjoxfE5BfERF&h=24cCxb2MlEou8ZVlwZ9smQ&s=1737198021&n=HIRAKO%20SHINJI%20x%20TURU%20R9%20%28Ultra%20Slowed%20%26%20BassBoosted%29&uT=R&uN=Y29kZWJ1c3RlcnM%3D"}
-        playing={isMusicPlaying}
-        volume={muted ? 0 : volume}
-        onProgress={handleProgress}
-        onDuration={handleDuration}
-        onStart={handleOnMusicStart}
-        onPause={handleOnMusicStop}
-        width="0"
-        height="0"
-      />
+      {song !== undefined && (
+        <ReactPlayer
+          ref={playerRef}
+          url={song.downloadurl}
+          playing={isPlaying}
+          volume={muted ? 0 : volume}
+          onProgress={handleProgress}
+          onDuration={handleDuration}
+          onPlay={handleOnMusicStart}
+          onPause={handleOnMusicStop}
+          controls
+          stopOnUnmount={true}
+          width="0"
+          height="0"
+        />
+      )}
     </>
   );
 }

@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["i.scdn.co","c.saavncdn.com"],
   },
-  // reactStrictMode: false
 };
 
 export default nextConfig;
