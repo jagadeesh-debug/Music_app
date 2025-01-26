@@ -6,22 +6,38 @@ import Image from "next/image";
 
 interface resData {
   downloadurl: string;
-  iamges: string;
+  image: string;
   name: string;
   yturl: string;
+  ytid: string
 }
 
 export const SongCard = ({ data }: { data: song }) => {
     const { musicID, setSongData } =
       useMusicPlayerStore();
+    let songData: songMusicPlayerInterface
+
     const handleClick = () => {
+      console.log(songData)
+      setSongData(songData);
+    }
+
+    const handleHover = () => {
       if (data.source === "jiosavan" && data.downloadurl !== ""){
-        setSongData(songToSongMusicPlayerInterface(data));
+        songData = songToSongMusicPlayerInterface(data)
       }
       else {
         goBackendApi("/fchytsong?name=" + data.name + data.artist[0]).then((res) => {
-          const data:resData = res.data
+          const responseData:resData = res.data
           console.log(decodeURL(data.downloadurl))
+          songData = songToSongMusicPlayerInterface({
+            id: data.id,
+            name: data.name,
+            artist: data.artist,
+            images: data.images,
+            source: "yt",
+            downloadurl: decodeURL(responseData.downloadurl)
+          })
         }).catch((e)=>console.log(e))
       }
     };
@@ -31,6 +47,7 @@ export const SongCard = ({ data }: { data: song }) => {
           data.id === musicID ? "bg-secondary" : "bg-background"
         } flex flex-col items-center justify-between p-2 sm:p-3 rounded-lg transition-all hover:bg-secondary hover:scale-[1.03] duration-200 w-64 hover:cursor-pointer`}
         onClick={handleClick}
+        onMouseEnter={handleHover}
       >
         <Image
           src={data.images[2].url}
