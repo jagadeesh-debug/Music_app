@@ -17,14 +17,15 @@ export const SongCard = ({ data }: { data: song }) => {
       useMusicPlayerStore();
     let songData: songMusicPlayerInterface
 
-    const handleClick = () => {
-      console.log(songData)
-      setSongData(songData);
-    }
+    // const handleClick = () => {
+    //   console.log(songData)
+    //   setSongData(songData);
+    // }
 
     const handleHover = () => {
       if (data.source === "jiosavan" && data.downloadurl !== ""){
         songData = songToSongMusicPlayerInterface(data)
+        setSongData(songData)
       }
       else {
         goBackendApi("/fchytsong?name=" + data.name + data.artist[0]).then((res) => {
@@ -38,6 +39,7 @@ export const SongCard = ({ data }: { data: song }) => {
             source: "yt",
             downloadurl: decodeURL(responseData.downloadurl)
           })
+          setSongData(songData)
         }).catch((e)=>console.log(e))
       }
     };
@@ -46,8 +48,8 @@ export const SongCard = ({ data }: { data: song }) => {
         className={` ${
           data.id === musicID ? "bg-secondary" : "bg-background"
         } flex flex-col items-center justify-between p-2 sm:p-3 rounded-lg transition-all hover:bg-secondary hover:scale-[1.03] duration-200 w-64 hover:cursor-pointer`}
-        onClick={handleClick}
-        onMouseEnter={handleHover}
+        onClick={handleHover}
+        // onMouseEnter={handleHover}
       >
         <Image
           src={data.images[2].url}
