@@ -169,7 +169,7 @@ function MusicPlayer() {
                     className="w-12 h-12 rounded-md shadow-lg"
                   />
                   <div>
-                    <h3 className="text-sm font-semibold">{song?.name}</h3>
+                    <h3 className="text-sm font-semibold bg-gray-200/20 px-2 rounded-md">{song?.name}</h3>
                     <p className="text-xs text-gray-400">{song?.artist}</p>
                   </div>
                 </div>

@@ -89,14 +89,14 @@ export default function InputBar() {
 
   return (
     <form
-      className="sticky ml-10 top-0 z-10 p-2 sm:p-4 shadow-md bg-background w-[90vw]"
+      className="sticky ml-10 top-0 z-10 p-2 sm:p-4 shadow-lg bg-background w-screen "
       onSubmit={handleSubmit}
     >
       <div className="max-w-3xl mx-auto flex justify-center items-center gap-2 sm:gap-3">
         <div className="relative">
           <Input
             placeholder="Search for music..."
-            className="text-sm sm:text-base md:text-lg p-4 flex-grow rounded-full lg:w-[36rem] inputBar"
+            className="text-sm sm:text-base md:text-lg p-4 py-6 flex-grow rounded-xl lg:w-[36rem] inputBar"
             required
             onChange={(e) => setSearchInput(e.target.value)}
             value={searchInput}

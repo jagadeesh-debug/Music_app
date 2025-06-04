@@ -16,7 +16,7 @@ export default function Home() {
   useEffect(() => {
     const auth = getAuth(app);
     const pathName = `/search?searchtxt=${
-      localStorage.getItem("search") || "khatta+flow"
+      localStorage.getItem("search") || "punjabi"
     }`;
     onAuthStateChanged(auth, (user) => {
       if (user) {

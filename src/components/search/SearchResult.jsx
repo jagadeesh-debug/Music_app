@@ -15,7 +15,6 @@ export default function SearchComponent() {
   const url = useLocation();
   const search = url.search.split("=")[1];
   const navigate = useNavigate();
-  // const [isMenuBar, setIsMenuBar] = useState(false);
 
   useEffect(() => {
     fetchAlbums(search);
@@ -25,7 +24,6 @@ export default function SearchComponent() {
   function handleSongClick(song) {
     if (song.id !== musicId) {
       setMusicId(song.id);
-      setTopresult(song);
     } else {
       setIsPlaying(true);
     }
@@ -61,19 +59,17 @@ export default function SearchComponent() {
                 </h2>
                 <div className="relative group">
                   <Card>
-                    <CardContent className="p-4 sm:p-6">
+                    <CardContent className="p-4 sm:p-6 shadow-lg">
                       <img
                         src={Topresult?.image[2].url}
                         alt={Topresult?.name}
                         loading="lazy"
-                        className="w-full max-w-[200px] sm:max-w-[300px] mx-auto mb-4 rounded shadow-lg"
+                        className="object-contain w-full  mx-auto mb-4 rounded border-red-500 brder-2"
                       />
                       <div className="space-y-2">
                         <h3 className="text-lg sm:text-xl font-semibold text-center mb-2">
                           {Topresult?.name }
                         </h3>
-
-                        {/* Label and View Count Row */}
                         <div className="flex items-center justify-center space-x-4 text-sm text-gray-600">
                           <div className="flex items-center">
                             <span className="bg-gray-200 px-2 py-1 rounded-full text-xs">
@@ -90,8 +86,6 @@ export default function SearchComponent() {
                       </div>
                     </CardContent>
                   </Card>
-
-                  {/* Play button - static on mobile/tablet, animated on desktop */}
                   <div className="absolute bottom-10 right-4 sm:bottom-4 lg:opacity-0 lg:translate-y-8 lg:scale-75 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:scale-100 transition-all duration-300 ease-out">
                     {isPlaying ? (<button
                       onClick={() => {setIsPlaying(!isPlaying)}}
@@ -109,7 +103,7 @@ export default function SearchComponent() {
               </div>
             )}
             {songs && (
-              <div className="w-[95vw] sm:w-full lg:w-2/3 border rounded-xl p-2">
+              <div className="w-[95vw] sm:w-full lg:w-2/3 border rounded-xl p-2 shadow-lg">
                 <h2 className="text-xl sm:text-2xl font-bold mb-4">Songs</h2>
                 <ScrollArea className="h-[40vh]   sm:h-[50vh]">
                   <ul className="space-y-2 ">
@@ -171,7 +165,7 @@ export default function SearchComponent() {
             )}
           </div>
           {albums && (
-            <div className="mt-6 w-[95vw] sm:w-full sm:mt-8 border p-4 rounded-xl">
+            <div className="mt-6 w-[95vw] sm:w-full sm:mt-8 border p-4 rounded-xl shadow-lg">
               <h2 className="text-xl sm:text-2xl font-bold mb-4">Albums</h2>
               <ScrollArea className="w-full">
                 <div className="flex gap-4 pb-4 overflow-x-auto">

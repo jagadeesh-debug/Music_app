@@ -17,7 +17,7 @@ function RandomArtists({ search }) {
   return (
     <>
       {artists && (
-        <div className="mt-4 mb-[15dvh] w-[95vw] sm:w-full border rounded-xl p-4">
+        <div className="mt-4 mb-[15dvh] w-[95vw] sm:w-full border rounded-xl p-4 shadow-lg">
           <h2 className="text-2xl font-bold mb-4">Artists</h2>
           <div className="flex space-x-4 px-4 overflow-x-scroll">
             {artists?.map((artist, i) => (
