@@ -119,6 +119,7 @@ function MusicPlayer() {
     const currentIndex = queue.findIndex((e) => e.id === musicId);
     if (currentIndex < queue.length - 1) setMusicId(queue[currentIndex + 1].id);
   };
+  const handleToggleMute = () => setMuted(!muted);
 
   const handlePrevious = () => {
     if (shuffle) {
@@ -144,7 +145,8 @@ function MusicPlayer() {
         <DrawerTrigger asChild>
           <Button
             variant="outline"
-            className={`absolute right-6 bottom-6 p-0 h-16 w-16 ${isPlaying ? "animate-spin" : ""} rounded-full`}
+            style={{ animationDuration: "5s"}}
+            className={`absolute right-6 bottom-6 p-0 h-16 w-16  ${isPlaying ? "animate-spin" : ""} rounded-full`}
           >
             <img className="rounded-full" src={song?.image?.[1]?.url} alt="Song" loading="lazy" />
           </Button>
