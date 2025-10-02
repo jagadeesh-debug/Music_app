@@ -9,9 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 const validatePassword = (password) => {
   const requirements = {
-    minLength: password.length >= 8,
-    hasUpperCase: /[A-Z]/.test(password),
-    hasLowerCase: /[a-z]/.test(password),
+    minLength: password.length >= 7,
+    hasLetter: /[a-zA-Z]/.test(password),
     hasNumbers: /\d/.test(password),
     hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password)
   };
@@ -22,12 +21,7 @@ const validatePassword = (password) => {
   return { requirements, score, isValid };
 };
 
-const getPasswordStrength = (score) => {
-  if (score === 0) return { text: '', color: '' };
-  if (score <= 2) return { text: 'Weak', color: 'text-red-500' };
-  if (score <= 4) return { text: 'Medium', color: 'text-yellow-500' };
-  return { text: 'Strong', color: 'text-green-500' };
-};
+
 
 function SignUp() {
   const auth = getAuth(app);
@@ -109,7 +103,6 @@ function SignUp() {
     
     setIsSubmitting(false);
   };
-  const strengthInfo = (passwordValidation && passwordValidation.score !== undefined) ? getPasswordStrength(passwordValidation.score) : { text: '', color: '' };
 
   return (
     <div className="flex flex-col gap-2 items-center">
@@ -138,41 +131,21 @@ function SignUp() {
             placeholder="Enter a strong password"
           />
           
-          {/* Password Strength Indicator */}
+          {/* Password Requirements Checklist */}
           {passwordValue && passwordValidation && (
             <div className="mt-2">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm">Strength:</span>
-                <span className={`text-sm font-medium ${strengthInfo.color}`}>
-                  {strengthInfo.text}
-                </span>
-                <div className="flex-1 bg-gray-200 h-2 rounded">
-                  <div 
-                    className={`h-2 rounded transition-all duration-300 ${
-                      passwordValidation.score <= 2 ? 'bg-red-500' :
-                      passwordValidation.score <= 4 ? 'bg-yellow-500' : 'bg-green-500'
-                    }`}
-                    style={{ width: `${(passwordValidation.score / 5) * 100}%` }}
-                  />
-                </div>
-              </div>
-              
-
               <div className="text-xs space-y-1">
                 <div className={passwordValidation.requirements.minLength ? 'text-green-600' : 'text-red-500'}>
-                  {passwordValidation.requirements.minLength ? '✓' : '✗'} At least 8 characters
+                  {passwordValidation.requirements.minLength ? '✓' : '✗'} Minimum 7 characters
                 </div>
-                <div className={passwordValidation.requirements.hasUpperCase ? 'text-green-600' : 'text-red-500'}>
-                  {passwordValidation.requirements.hasUpperCase ? '✓' : '✗'} One uppercase letter
-                </div>
-                <div className={passwordValidation.requirements.hasLowerCase ? 'text-green-600' : 'text-red-500'}>
-                  {passwordValidation.requirements.hasLowerCase ? '✓' : '✗'} One lowercase letter
+                <div className={passwordValidation.requirements.hasLetter ? 'text-green-600' : 'text-red-500'}>
+                  {passwordValidation.requirements.hasLetter ? '✓' : '✗'} At least one letter
                 </div>
                 <div className={passwordValidation.requirements.hasNumbers ? 'text-green-600' : 'text-red-500'}>
-                  {passwordValidation.requirements.hasNumbers ? '✓' : '✗'} One number
+                  {passwordValidation.requirements.hasNumbers ? '✓' : '✗'} At least one number
                 </div>
                 <div className={passwordValidation.requirements.hasSpecialChar ? 'text-green-600' : 'text-red-500'}>
-                  {passwordValidation.requirements.hasSpecialChar ? '✓' : '✗'} One special character (!@#$%^&*(),.?&quot;:{}|&lt;&gt;)
+                  {passwordValidation.requirements.hasSpecialChar ? '✓' : '✗'} At least one special character (!@#$%^&*)
                 </div>
               </div>
             </div>
