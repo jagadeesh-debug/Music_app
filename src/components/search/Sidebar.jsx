@@ -116,7 +116,7 @@ const Sidebar = () => {
             <li>
               <Button variant="ghost" className="w-full justify-start text-lg py-4 hover:bg-accent">
                 <a
-                  href="https://anmolsingh.vercel.app"
+                  href="https://anmol.pro/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center w-full"
