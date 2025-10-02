@@ -145,10 +145,28 @@ function MusicPlayer() {
         <DrawerTrigger asChild>
           <Button
             variant="outline"
+            aria-label="Open player"
             style={{ animationDuration: "5s"}}
-            className={`absolute right-6 bottom-6 p-0 h-16 w-16  ${isPlaying ? "animate-spin" : ""} rounded-full`}
+            className={`absolute right-6 bottom-6 p-0 h-16 w-16 rounded-full overflow-hidden shadow-lg ring-1 ring-white/10 hover:ring-white/30 transition ${
+              isPlaying && (song?.image?.[1]?.url ? "animate-spin" : "")
+            }`}
           >
-            <img className="rounded-full" src={song?.image?.[1]?.url} alt="Song" loading="lazy" />
+            {song?.image?.[1]?.url ? (
+              <img
+                className="h-full w-full object-cover"
+                src={song?.image?.[1]?.url}
+                alt=""
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/image.png";
+                }}
+              />
+            ) : (
+              <div className="h-full w-full grid place-items-center bg-black/30 text-white">
+                <Play className="h-6 w-6" />
+              </div>
+            )}
           </Button>
         </DrawerTrigger>
         <DrawerContent className="h-[15dvh]">
@@ -160,7 +178,22 @@ function MusicPlayer() {
             <div className="max-w-screen-lg mx-auto">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <img src={song?.image?.[2]?.url} alt={song?.name} loading="lazy" className="w-12 h-12 rounded-md shadow-lg" />
+                  {song?.image?.[2]?.url ? (
+                    <img
+                      src={song?.image?.[2]?.url}
+                      alt=""
+                      loading="lazy"
+                      className="w-12 h-12 rounded-md shadow-lg object-cover"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/image.png";
+                      }}
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-md shadow-lg grid place-items-center bg-black/30">
+                      <Play className="w-5 h-5 text-white" />
+                    </div>
+                  )}
                   <div>
                     <h3 className="text-sm font-semibold bg-gray-200/20 px-2 rounded-md">{song?.name}</h3>
                     <p className="text-xs text-gray-400">{song?.artist}</p>
