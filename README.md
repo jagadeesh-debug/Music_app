@@ -55,3 +55,17 @@ Don't forget to give the project a star! Thanks again!
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## Screenshots
+
+### Home Screen
+![Home Screen](./screenshots/home.png)
+Description: The main landing page where users can browse music.
+
+### Queue Management
+![Queue Management](./screenshots/queue.png)
+Description: Users can view, reorder, and manage their listening queue.
+
+### Now Playing
+![Now Playing](./screenshots/now-playing.png)
+Description: Shows the current song, playback controls, and album art.
