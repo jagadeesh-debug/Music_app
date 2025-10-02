@@ -3,23 +3,34 @@ import { useEffect } from "react";
 export default function useKeyboardShortcuts(actions) {
   useEffect(() => {
     const handleKeyDown = (event) => {
+      if (!event.ctrlKey) return; // only respond if Ctrl is pressed
+
       switch (event.code) {
-        case "Space": // Play/Pause
+        case "KeyS": // Ctrl + S → Play/Pause
           event.preventDefault();
           actions.togglePlayPause();
           break;
-        case "ArrowRight": // Next track
+
+        case "KeyN": // Ctrl + N → Next track
+          event.preventDefault();
           actions.nextTrack();
           break;
-        case "ArrowLeft": // Previous track
+
+        case "KeyP": // Ctrl + P → Previous track
+          event.preventDefault();
           actions.prevTrack();
           break;
-        case "ArrowUp": // Volume up
+
+        case "KeyU": // Ctrl + U → Volume up
+          event.preventDefault();
           actions.increaseVolume();
           break;
-        case "ArrowDown": // Volume down
+
+        case "KeyD": // Ctrl + D → Volume down
+          event.preventDefault();
           actions.decreaseVolume();
           break;
+
         default:
           break;
       }
