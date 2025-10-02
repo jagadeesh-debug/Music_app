@@ -11,7 +11,7 @@ import Menu from "../Menu";
 export default function SearchComponent() {
   const { fetchSongs, songs, fetchAlbums, albums, Topresult, setTopresult } =
     useFetch();
-  const { setMusicId, musicId, isPlaying, setIsPlaying, addSongToQueue } = useStore();
+  const { setMusicId, musicId, isPlaying, setIsPlaying } = useStore();
   const url = useLocation();
   const search = url.search.split("=")[1];
   const navigate = useNavigate();
@@ -155,12 +155,6 @@ export default function SearchComponent() {
                             />
                           )}
 
-                          <button
-                            className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
-                            onClick={() => addSongToQueue(song)}
-                          >
-                            Add to Queue
-                          </button>
                           <Menu song={song} />
                         </div>
                       </li>
