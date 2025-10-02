@@ -30,6 +30,59 @@ function MusicPlayer() {
   const { musicId, isPlaying, setIsPlaying, setMusicId, setQueue, queue } = useStore();
 
   useEffect(() => {
+  const handleKeyDown = (event) => {
+    switch (event.code) {
+      case "Space": // Play/Pause
+        event.preventDefault(); // prevent page scrolling
+        handlePlayPause();
+        break;
+
+      case "ArrowRight": // Next track
+        handleNext();
+        break;
+
+      case "ArrowLeft": // Previous track
+        handlePrevios();
+        break;
+
+      case "ArrowUp": // Increase volume
+        event.preventDefault();
+        setMuted(false);
+        setVolume((v) => {
+          const newVol = Math.min(1, v + 0.1);
+          localStorage.setItem("volume", newVol);
+          return newVol;
+        });
+        break;
+
+      case "ArrowDown": // Decrease volume
+        event.preventDefault();
+        setMuted(false);
+        setVolume((v) => {
+          const newVol = Math.max(0, v - 0.1);
+          localStorage.setItem("volume", newVol);
+          return newVol;
+        });
+        break;
+
+      case "KeyM": // Mute toggle
+        handleToggleMute();
+        break;
+
+      case "KeyS": // Shuffle toggle
+        setShuffle((prev) => !prev);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+  return () => window.removeEventListener("keydown", handleKeyDown);
+}, [isPlaying, queue, musicId, shuffle, volume, muted]);
+
+  useEffect(() => {
 
     async function fetchSong() {
       if (musicId) {
