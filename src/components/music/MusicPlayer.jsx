@@ -6,6 +6,8 @@ import { getImageColors } from "../color/ColorGenrator";
 import { Drawer, DrawerContent, DrawerTrigger, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 import { useStore, useFetch } from "../../zustand/store";
+import QueueManager from "./QueueManager";
+
 import useKeyboardShortcuts from "../../lib/useKeyboardShortcuts";
 
 function MusicPlayer() {
@@ -222,7 +224,10 @@ function MusicPlayer() {
             </div>
           </div>
         </DrawerContent>
-      </Drawer>
+      </Drawer
+      <div style={{ position: "fixed", right: 0, bottom: 0, zIndex: 1000, width: 350 }}>
+        <QueueManager />
+      </div>
 
       <ReactPlayer
         ref={playerRef}

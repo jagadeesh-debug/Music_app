@@ -73,4 +73,5 @@ export const useStore = create((set) => ({
   setDialogOpen: (prop) => set({ dialogOpen: prop }),
   setIsPlaying: (prop) => set({ isPlaying: prop }),
   setQueue: (prop) => set({ queue: prop }),
+  addSongToQueue: (song) => set((state) => ({ queue: [...state.queue, song] })),
 }));
