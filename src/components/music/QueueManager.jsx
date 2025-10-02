@@ -18,9 +18,7 @@ export default function QueueManager() {
   };
 
   // Add song to queue (for demo, just a placeholder)
-  const addSong = (song) => {
-    setQueue([...queue, song]);
-  };
+  // Now handled globally via zustand: useStore().addSongToQueue
 
   // Drag and drop handlers
   const onDragStart = (e, idx) => {
@@ -50,8 +48,7 @@ export default function QueueManager() {
           </li>
         ))}
       </ul>
-      {/* Example add button (replace with real UI) */}
-      {/* <button onClick={() => addSong({ id: Date.now(), title: "New Song" })}>Add Song</button> */}
+  {/* Example add button removed; use 'Add to Queue' in song list */}
     </div>
   );
 }
