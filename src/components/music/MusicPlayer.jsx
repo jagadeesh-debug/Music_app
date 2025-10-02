@@ -21,9 +21,9 @@ function MusicPlayer() {
   const { songs } = useFetch();
   const { musicId, isPlaying, setIsPlaying, setMusicId, setQueue, queue } = useStore();
 
-  // Keyboard shortcuts actions
+  // Keyboard shortcuts
   useKeyboardShortcuts({
-    togglePlayPause: () => handlePlayPause(),
+    togglePlayPause: () => setIsPlaying((prev) => !prev),
     nextTrack: () => handleNext(),
     prevTrack: () => handlePrevious(),
     increaseVolume: () => {
@@ -42,6 +42,8 @@ function MusicPlayer() {
         return newVol;
       });
     },
+    toggleMute: () => setMuted((prev) => !prev),
+    toggleShuffle: () => setShuffle((prev) => !prev),
   });
 
   // Fetch song when musicId changes
@@ -78,7 +80,6 @@ function MusicPlayer() {
     setMuted(false);
   };
 
-  const handleToggleMute = () => setMuted(!muted);
 
   const handleProgress = (state) => {
     setPlayed(state.played);

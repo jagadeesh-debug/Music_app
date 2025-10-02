@@ -13,7 +13,7 @@ A modern music application built with React, Vite, and Tailwind CSS. This projec
 * **Create and manage playlists:** Organize your music into custom playlists.
 * **User authentication:** Sign up and log in to save your playlists and preferences.
 * **Responsive design:** Enjoy a seamless experience on both desktop and mobile devices.
-* **Keywordd Shortcuts:** Click arrows, pause,stop,shuffle,mute .
+* **Keyword Shortcuts:** Shortcuts to next, previous,pause,stop,shuffle,mute .
 
 ## Getting Started
 

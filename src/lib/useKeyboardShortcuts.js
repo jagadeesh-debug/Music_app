@@ -3,10 +3,10 @@ import { useEffect } from "react";
 export default function useKeyboardShortcuts(actions) {
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (!event.ctrlKey) return; // only respond if Ctrl is pressed
+      if (!event.ctrlKey) return; // Only respond if Ctrl is pressed
 
       switch (event.code) {
-        case "KeyS": // Ctrl + S → Play/Pause
+        case "Space": // Ctrl + Space → Play/Pause
           event.preventDefault();
           actions.togglePlayPause();
           break;
@@ -29,6 +29,16 @@ export default function useKeyboardShortcuts(actions) {
         case "KeyD": // Ctrl + D → Volume down
           event.preventDefault();
           actions.decreaseVolume();
+          break;
+
+        case "KeyM": // Ctrl + M → Mute toggle
+          event.preventDefault();
+          actions.toggleMute();
+          break;
+
+        case "KeyH": // Ctrl + H → Shuffle toggle
+          event.preventDefault();
+          actions.toggleShuffle();
           break;
 
         default:
