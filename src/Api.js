@@ -85,7 +85,7 @@ export function pushInDb(playlistId, musicId) {
   });
 }
 
-export function deletePlaylist(
+export async function deletePlaylist(
   playlistId,
   playlists,
   setPlaylist,
@@ -96,17 +96,16 @@ export function deletePlaylist(
   if (user?.uid) {
     try {
       const docRef = doc(db, "users", user?.uid, "playlists", playlistId);
-      deleteDoc(docRef);
+      await deleteDoc(docRef);
+      // Only update the UI after successful deletion
       emptyPlaylist();
+      // pick the next available playlist (first one that's not the deleted playlist)
+      const next = playlists.find((e) => e.id !== playlistId);
+      if (next) setPlaylist(next);
       toast.success("Playlist deleted successfully!");
     } catch (error) {
       toast.error("Failed to delete playlist.");
       console.error("Firestore delete error:", error);
     }
   }
-  playlists.forEach((e) => {
-    if (e.id !== playlistId) {
-      setPlaylist(e);
-    }
-  });
 }
