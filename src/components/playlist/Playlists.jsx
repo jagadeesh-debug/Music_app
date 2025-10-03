@@ -32,7 +32,7 @@ export default function Playlist({ setPopover }) {
       const collectionRef = collection(db, "users", user?.uid, "playlists");
       await addDoc(collectionRef, {
         name: input.current.value,
-        songs: arrayUnion(),
+        songs: [],
       });
       emptyPlaylist();
       fetchFireStore(setPlaylist);
