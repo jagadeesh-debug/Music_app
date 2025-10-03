@@ -247,6 +247,8 @@ function MusicPlayer() {
         volume={muted ? 0 : volume}
         onProgress={handleProgress}
         onDuration={handleDuration}
+        onPlay={() => setIsPlaying(true)}  
+        onPause={() => setIsPlaying(false)}
         onEnded={playNext} // Use centralized next function
         width="0"
         height="0"
