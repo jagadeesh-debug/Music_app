@@ -18,7 +18,7 @@ reviews:
   file_path_instructions:
     - path: "src/**/*.{js,jsx,ts,tsx}"
       instructions: |
-        - Components should be functional components using javasript.
+        - Components should be functional components using javascript.
         - Use appropriate hooks for state management.
         - Implement proper loading states for async operations.
         - Follow the container/presentation pattern where applicable.
@@ -26,7 +26,7 @@ reviews:
         - Handle client-side errors gracefully with user feedback.
 
 general_guidelines: |
-  - Follow javasript best practices .
+  - Follow javascript best practices .
   - Use consistent error handling patterns.
   - Implement proper authentication checks.
   - Keep components and functions small and focused.
